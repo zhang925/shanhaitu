@@ -1,0 +1,54 @@
+本项目 修改后的开发环境
+MyEclipse2014 + jdk7 + tomcat7 + mysql //其他可能 运行不起来
+
+
+1. 先创建表
+
+CREATE TABLE `A_Z_CLASSIC` (
+`ID` varchar(32) NOT NULL default '' COMMENT '主键',
+`UID` varchar(32) default NULL COMMENT '用户ID',
+`TITLE` varchar(500) default NULL COMMENT '标题',
+`CONTENT`  varchar(2000)   default NULL COMMENT '内容',
+`createtime` datetime default NULL COMMENT '创建时间',
+PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+1  加载Controller(spring-mvc.xml) 
+
+
+<context:component-scan base-package="org.jeecgframework.web.*,com.jeecg.*,com.zzy.*">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+
+
+2  service(spring-mvc-hibernate.xml)
+
+ <context:component-scan base-package="com.buss.*">
+      <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+  </context:component-scan>
+
+ 
+
+  如果生成代码时，代码分层风格选择了“代码分层”，则配置文件如下：
+  <property name="packagesToScan">
+      <list>
+          ....
+          <!-- 扫描 代码分层 实体 -->
+          <value>com.buss.entity.*</value>
+          <!-- 扫描 业务分层 实体 -->
+          <value>com.buss.*.entity</value>
+      </list>
+  </property>
+
+最后可能，webpage 地址有问题
+
+
+
+
+
+
+
+
