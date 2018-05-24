@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-module
   type="WEB"
-  name="jeecg_3_7_1_20170918"
+  name="shanhai"
   id="myeclipse.1505706220839"
   context-root="/jeecg"
   j2ee-spec="5.0"
-  archive="jeecg_3_7_1_20170918.war">
+  archive="shanhai.war">
   <attributes>
     <attribute name="webrootdir" value="/WebRoot" />
   </attributes>
