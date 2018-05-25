@@ -23,7 +23,14 @@
 </head>
 
 <body class="gray-bg">
+<br/><br/>
+<h1>欢迎!</h1>
+
+
+
+<div style="display: none;">
 <div class="row  border-bottom white-bg dashboard-header">
+
     <div class="col-sm-12">
         <blockquote class="text-warning" style="font-size:14px">您是否需要一款企业级J2EE快速开发平台，提高开发效率，缩短项目周期…
             <br>您是否一直在苦苦寻找一款强大的代码生成器，节省码农的繁琐重复工作…
@@ -502,6 +509,8 @@
 
 <!-- 自定义js -->
 <script src="plug-in-ui/hplus/js/content.js"></script>
+
+</div>
 </body>
 
 </html>

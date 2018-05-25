@@ -1,3 +1,18 @@
 项目采用 Spring SpringMVC  4.0.9 + Hibernate 4.1 + Mysql 5.7
 前端 easyui
 基础框架 jeecg
+
+acer_main.jsp
+hplus_main.jsp
+main.jsp
+shotcut_main.jsp
+的
+<%@include file="/context/layui.jsp"%>
+注释掉 就没有 聊天了
+
+
+hplus_main.jsp 修改 登陆后主界面，信息
+
+jeecg-aceplus.png为首页的logo
+
+login.jsp 设置语言选项。等登陆的设计。

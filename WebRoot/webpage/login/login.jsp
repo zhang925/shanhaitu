@@ -51,9 +51,9 @@
           <div class="center">
             <h1 id="id-text2" class="grey">
               <i class="ace-icon fa fa-leaf green"></i>
-               JEECG 演示系统
+               欢迎使用系统
             </h1>
-            <h4 class="blue" id="id-company-text">www.jeecg.org</h4>
+            <h4 class="blue" id="id-company-text">www.xiaofan.com</h4>
           </div>
           <div class="space-6"></div>
           <div class="position-relative">
@@ -110,7 +110,7 @@
 
                 </div>
                 <div class="toolbar clearfix">
-                  <div style="float: right">
+                  <div style="float: right;display: none;">
                     <a href="#"  class="forgot-password-link">
                     	  语言
                       <i class="ace-icon fa fa-arrow-right"></i>
@@ -121,8 +121,8 @@
                 </form>
               </div>
             </div>
-            <div class="center"><h4 class="blue" id="id-company-text">&copy; JEECG版权所有 v_3.7.1</h4></div>
-            <div class="navbar-fixed-top align-right">
+            <div class="center"><h4 class="blue" id="id-company-text">&copy; ***版权所有</h4></div>
+            <div class="navbar-fixed-top align-right" style="display:none;">
               <br />
               &nbsp;
               <a id="btn-login-dark" class="blue" href="#" onclick="darkStyle()">Dark</a>
