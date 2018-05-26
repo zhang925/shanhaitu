@@ -2,6 +2,7 @@
 前端 easyui
 基础框架 jeecg
 
+--------------------------------------------------------
 acer_main.jsp
 hplus_main.jsp
 main.jsp
@@ -9,10 +10,11 @@ shotcut_main.jsp
 的
 <%@include file="/context/layui.jsp"%>
 注释掉 就没有 聊天了
-
-
-hplus_main.jsp 修改 登陆后主界面，信息
+--------------------------------------------------------
+hplus_main.jsp 修改 登陆后 后台主界面，信息
 
 jeecg-aceplus.png为首页的logo
 
 login.jsp 设置语言选项。等登陆的设计。
+
+WebRoot下的images的favicon.ico为HTML的标题图标

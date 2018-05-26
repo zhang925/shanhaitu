@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
-	<display-name>Jeecg 微云快速开发平台</display-name>
+	<display-name>小凡平台</display-name>
 	<context-param>
 		<param-name>webAppRootKey</param-name>
 		<param-value>jeecg-3.7.1</param-value>
@@ -181,6 +181,11 @@
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>/index.jsp</welcome-file>
+	</welcome-file-list>
+
 	<welcome-file-list>
 		<welcome-file>/webpage/login/login.jsp</welcome-file>
 	</welcome-file-list>
