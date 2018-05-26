@@ -27,4 +27,9 @@ login.jsp 设置语言选项。等登陆的设计。
 
 WebRoot下的images的favicon.ico为HTML的标题图标
 -------------------------------
+org.jeecgframework.core.interceptors  AuthInterceptor
+forword 方法是 拦截没有登录的
+没有登录会走这个方法
+/webpage/login/timeout.jsp
 
+在 preHandle 的方法可以 处理是否跳过某些 权限

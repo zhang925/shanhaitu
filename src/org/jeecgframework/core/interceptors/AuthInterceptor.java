@@ -88,10 +88,22 @@ public class AuthInterceptor implements HandlerInterceptor {
 	}
 
 	/**
+	 * 在前端的时候有时候不需要登陆就要拿到一些数据
+	 *  true 表示不需要拦截，false 需要拦截
+	 * @return
+	 */
+	public boolean isHandle(HttpServletRequest request){
+		String requestUrl = request.getRequestURI();//获取当前请求的url
+		boolean f = true;
+		return f;//不需要拦截
+	}
+	/**
 	 * 在controller前拦截
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
-
+		if(1==1){//在这里可以自定一些 拦截的URL 如果 符合 不需要拦截的，return true，否则 return false;
+			String requestUrl = request.getRequestURI();//获取当前请求的url
+		}
 		//判断是否被注解跳过权限认证  先判断类注解然后方法注解 都没有则走原来逻辑
 		HandlerMethod handlerMethod=(HandlerMethod)object;
 		JAuth jauthType =handlerMethod.getBean().getClass().getAnnotation(JAuth.class);
@@ -320,8 +332,8 @@ public class AuthInterceptor implements HandlerInterceptor {
 	/**
 	 * 转发
 	 * 
-	 * @param user
-	 * @param req
+	 * @param
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(params = "forword")
@@ -334,6 +346,22 @@ public class AuthInterceptor implements HandlerInterceptor {
 		//超时，未登陆页面跳转
 		//response.sendRedirect(request.getServletContext().getContextPath()+"/loginController.do?login");
 
+		//这里判断是否是 ajax 不登陆即可 调用的
+		boolean isHandle = isHandle( request);
+		if(isHandle==false){//说明是需要拦截的但又是 前端ajax 直接调用的。
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = null;
+			try {
+				out = response.getWriter();
+			} catch (IOException e) {
+				System.out.println("获取输出流异常");
+				e.printStackTrace();
+			}
+			out.println("successCallback({\"state\":\"权限不够！\"})");
+			out.flush();
+			out.close();
+			return;
+		}
 		response.sendRedirect(request.getSession().getServletContext().getContextPath()+"/webpage/login/timeout.jsp");
 
 		//request.getRequestDispatcher("loginController.do?login").forward(request, response);

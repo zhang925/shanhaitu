@@ -9,7 +9,8 @@
 <script type="text/javascript" src="plug-in/login/js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="plug-in/login/js/iphone.check.js"></script>
 <script type="text/javascript" src="plug-in/login/js/login.js"></script>
-<script type="text/javascript">
+
+	<script type="text/javascript">
 	    //判断如果当前页面不为主框架，则将主框架进行跳转
 	  	var tagert_URL = "<%=request.getContextPath()%>/loginController.do?login";
 	    if(self==top){
@@ -18,5 +19,6 @@
 	    	top.location.href = tagert_URL;
 	    }
 	  </script>
+
 </body>
 </html>
