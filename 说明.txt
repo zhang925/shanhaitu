@@ -1,7 +1,15 @@
 项目采用 Spring SpringMVC  4.0.9 + Hibernate 4.1 + Mysql 5.7
 前端 easyui
 基础框架 jeecg
+管理员账号：admin
+密码：147258369
+--------------------------------------------------------
+配置文件介绍：
+src 下的 dbconfig.properties 是配置数据库的
+支持MySql、SQL Server、Oracle其他种类的数据库，需要修改基础代码，这里不做介绍
 
+p3-cg-onfig.properties 是代码生成 时候路径等的配置
+p3-cg-dbconfig.properties 是代码生成映射数据库的配置
 --------------------------------------------------------
 acer_main.jsp
 hplus_main.jsp
@@ -18,3 +26,5 @@ jeecg-aceplus.png为首页的logo
 login.jsp 设置语言选项。等登陆的设计。
 
 WebRoot下的images的favicon.ico为HTML的标题图标
+-------------------------------
+
