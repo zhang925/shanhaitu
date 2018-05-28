@@ -2,20 +2,14 @@ package org.jeecgframework.core.interceptors;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.Logger;
 import org.jeecgframework.core.annotation.JAuth;
-import org.jeecgframework.core.common.exception.GlobalExceptionResolver;
 import org.jeecgframework.core.common.model.json.AjaxJson;
 import org.jeecgframework.core.constant.Globals;
 import org.jeecgframework.core.enums.Permission;
@@ -94,15 +88,26 @@ public class AuthInterceptor implements HandlerInterceptor {
 	 */
 	public boolean isHandle(HttpServletRequest request){
 		String requestUrl = request.getRequestURI();//获取当前请求的url
-		boolean f = true;
-		return f;//不需要拦截
+
+		requestUrl = requestUrl.replace("/","");
+		List<Map<String, Object>> list = systemService.findForJdbc(" select authority_uri from t_s_authority_white ");
+		boolean flag = false;
+		for(Map<String, Object> map : list){
+			if(requestUrl.equals(map.get("authority_uri"))){//查到是 免拦截的
+				flag = true;
+				break;
+			}
+		}
+		return flag;//不需要拦截
 	}
 	/**
 	 * 在controller前拦截
 	 */
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
-		if(1==1){//在这里可以自定一些 拦截的URL 如果 符合 不需要拦截的，return true，否则 return false;
-			String requestUrl = request.getRequestURI();//获取当前请求的url
+		if(isHandle( request)){//在这里可以自定一些 拦截的URL 如果 符合 不需要拦截的，return true，否则 return false;
+			//符合自定义的
+			//但是考虑是否登录，这里先这是掉，以后考虑是否登录。这里先给最高权限吧。
+			return true;
 		}
 		//判断是否被注解跳过权限认证  先判断类注解然后方法注解 都没有则走原来逻辑
 		HandlerMethod handlerMethod=(HandlerMethod)object;
@@ -348,7 +353,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 		//这里判断是否是 ajax 不登陆即可 调用的
 		boolean isHandle = isHandle( request);
-		if(isHandle==false){//说明是需要拦截的但又是 前端ajax 直接调用的。
+		if(isHandle){
+			//说明是不需要拦截的但又是 前端ajax 直接调用的。即是自定义的，但是考虑是否登录，这里先这是掉，以后考虑是否登录。
+			//这里先给最高权限
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = null;
 			try {
