@@ -74,8 +74,10 @@ CREATE TABLE `sht_question_category` (
 -- ---------------- 8 问题标签关联表 -------------------------
 DROP TABLE IF EXISTS `sht_question_relation_tag`;
 CREATE TABLE `sht_question_relation_tag` (
+  `id` varchar(32) NOT NULL,
   `tag_id` varchar(32) DEFAULT NULL COMMENT '标签id',
-  `question_id` varchar(32) DEFAULT NULL COMMENT '问题id'
+  `question_id` varchar(32) DEFAULT NULL COMMENT '问题id',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------  9 文章新闻表 -------------------------
