@@ -8,6 +8,7 @@ import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.jeecgframework.web.system.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,80 +19,82 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+//import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
-@RequestMapping("/indexController")
+@RequestMapping("/index")
+//@CrossOrigin(origins = "*", maxAge = 3600)
 public class IndexController {
+
    @Autowired
     private AuthorityWhiteServiceI authorityWhiteService;
     @Autowired
     private SystemService systemService;
+    //注意，当是 value 的时候 调用 api/index/val值
+    //是param的时候，就是 index.do?param 了
 
-    @RequestMapping(params = "index")//, method = RequestMethod.GET
-    @ResponseBody
-    public void index(HttpServletRequest request, HttpServletResponse response) {
-        TSUser user = ResourceUtil.getSessionUser();
-        List list = new ArrayList();
-        list = authorityWhiteService.loadAll(AuthorityWhiteEntity.class);
-
-        JSONObject jobj = new JSONObject();//new一个JSON
-        jobj.accumulate("list", list);
-
-
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            System.out.println("获取输出流异常");
-            e.printStackTrace();
-        }
-        out.println("successCallback("+jobj.toString()+")");
-        out.flush();
-        out.close();
-        }
-
-    @RequestMapping(value = "/getUserSIDRest/{username}")
-    public void getUserSIDRest(@PathVariable String username, HttpServletRequest request, HttpServletResponse response){
-       
-    }
-
-    @RequestMapping(params = "indexList")//, method = RequestMethod.GET
-    @ResponseBody
-    public void indexList( HttpServletRequest request, HttpServletResponse response) {
-        TSUser user = ResourceUtil.getSessionUser();
-
-        List list = new ArrayList();
-        list =authorityWhiteService.loadAll(AuthorityWhiteEntity.class);
-        JSONObject jobj = new JSONObject();//new一个JSON
-        jobj.accumulate("list", list);//row是代表显示的页的数据
-
-
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            System.out.println("获取输出流异常");
-            e.printStackTrace();
-        }
-        out.println(jobj.toString());
-        out.flush();
-        out.close();
-
-    }
 
     /**
      * 测试
      * @return
      */
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public Map test(HttpServletResponse rps){
+    @RequestMapping(value = "/test")
+    @ResponseBody
+    public Map test(HttpServletResponse rps,HttpServletResponse response,HttpServletRequest request){
         Map map = new HashMap();
         map.put("state","当你看到这句话的时候说明自定义服务已经开启！");
         return map;
     }
 
+
+    @RequestMapping(value = "authorityList")//, method = RequestMethod.GET
+    @ResponseBody
+    public List authorityList( HttpServletRequest request, HttpServletResponse response) {
+        TSUser user = ResourceUtil.getSessionUser();
+        List list = new ArrayList();
+        list =authorityWhiteService.loadAll(AuthorityWhiteEntity.class);
+        return list;
+
+    }
+
+
+    @RequestMapping(value = "/getUserSIDRest/{username}")
+    public void getUserSIDRest(@PathVariable String username, HttpServletRequest request, HttpServletResponse response){
+
+    }
+
+
+
+
+
+
+
+
+
+    //这里不在使用jsonp 了 找到了 解决方法 CORSFilter 类
+    @RequestMapping(value = "testjsonp")//, method = RequestMethod.GET
+    @ResponseBody
+    public void testjsonp( HttpServletResponse response,HttpServletRequest request) {
+        TSUser user = ResourceUtil.getSessionUser();
+        List list = new ArrayList();
+        list = authorityWhiteService.loadAll(AuthorityWhiteEntity.class);
+        JSONObject jobj = new JSONObject();//new一个JSON
+        jobj.accumulate("list", list);
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            System.out.println("获取输出流异常");
+            e.printStackTrace();
+        }
+
+        out.println("successCallback("+jobj.toString()+")");
+        out.flush();
+        out.close();
+
+
+    }
       /*
        跨域请求调用示例
        $.ajax({
