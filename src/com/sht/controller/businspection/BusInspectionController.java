@@ -45,9 +45,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**   
  * @Title: Controller
- * @Description: 商务考察表
+ * @Description: 商务考察
  * @author zhangdaihao
- * @date 2018-05-29 17:16:25
+ * @date 2018-05-29 22:46:59
  * @version V1.0   
  *
  */
@@ -69,7 +69,7 @@ public class BusInspectionController extends BaseController {
 
 
 	/**
-	 * 商务考察表列表 页面跳转
+	 * 商务考察列表 页面跳转
 	 * 
 	 * @return
 	 */
@@ -97,7 +97,7 @@ public class BusInspectionController extends BaseController {
 	}
 
 	/**
-	 * 删除商务考察表
+	 * 删除商务考察
 	 * 
 	 * @return
 	 */
@@ -107,7 +107,7 @@ public class BusInspectionController extends BaseController {
 		String message = null;
 		AjaxJson j = new AjaxJson();
 		busInspection = systemService.getEntity(BusInspectionEntity.class, busInspection.getId());
-		message = "商务考察表删除成功";
+		message = "商务考察删除成功";
 		busInspectionService.delete(busInspection);
 		systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 		
@@ -117,7 +117,7 @@ public class BusInspectionController extends BaseController {
 
 
 	/**
-	 * 添加商务考察表
+	 * 添加商务考察
 	 * 
 	 * @param ids
 	 * @return
@@ -128,7 +128,7 @@ public class BusInspectionController extends BaseController {
 		String message = null;
 		AjaxJson j = new AjaxJson();
 		if (StringUtil.isNotEmpty(busInspection.getId())) {
-			message = "商务考察表更新成功";
+			message = "商务考察更新成功";
 			BusInspectionEntity t = busInspectionService.get(BusInspectionEntity.class, busInspection.getId());
 			try {
 				MyBeanUtils.copyBeanNotNull2Bean(busInspection, t);
@@ -136,10 +136,10 @@ public class BusInspectionController extends BaseController {
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
-				message = "商务考察表更新失败";
+				message = "商务考察更新失败";
 			}
 		} else {
-			message = "商务考察表添加成功";
+			message = "商务考察添加成功";
 			busInspectionService.save(busInspection);
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}
@@ -148,7 +148,7 @@ public class BusInspectionController extends BaseController {
 	}
 
 	/**
-	 * 商务考察表列表页面跳转
+	 * 商务考察列表页面跳转
 	 * 
 	 * @return
 	 */

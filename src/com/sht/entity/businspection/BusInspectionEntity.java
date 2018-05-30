@@ -17,9 +17,9 @@ import javax.persistence.SequenceGenerator;
 
 /**   
  * @Title: Entity
- * @Description: 商务考察表
+ * @Description: 商务考察
  * @author zhangdaihao
- * @date 2018-05-29 17:16:25
+ * @date 2018-05-29 22:46:59
  * @version V1.0   
  *
  */
