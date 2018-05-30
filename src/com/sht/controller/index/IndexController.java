@@ -8,16 +8,16 @@ import org.jeecgframework.core.util.ResourceUtil;
 import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.jeecgframework.web.system.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/indexController")
@@ -51,6 +51,11 @@ public class IndexController {
         out.close();
         }
 
+    @RequestMapping(value = "/getUserSIDRest/{username}")
+    public void getUserSIDRest(@PathVariable String username, HttpServletRequest request, HttpServletResponse response){
+       
+    }
+
     @RequestMapping(params = "indexList")//, method = RequestMethod.GET
     @ResponseBody
     public void indexList( HttpServletRequest request, HttpServletResponse response) {
@@ -74,6 +79,17 @@ public class IndexController {
         out.flush();
         out.close();
 
+    }
+
+    /**
+     * 测试
+     * @return
+     */
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public Map test(HttpServletResponse rps){
+        Map map = new HashMap();
+        map.put("state","当你看到这句话的时候说明自定义服务已经开启！");
+        return map;
     }
 
       /*
