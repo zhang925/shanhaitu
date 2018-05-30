@@ -27,7 +27,9 @@
 
     <%--<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>--%>
-
+    <script>
+        location.href = "loginController.do?login";
+    </script>
 </head>
 
 

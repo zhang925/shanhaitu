@@ -587,7 +587,7 @@ public class UserController extends BaseController {
 	/**
 	 * 检查用户名
 	 * 
-	 * @param ids
+	 * @param request
 	 * @return
 	 */
 	@RequestMapping(params = "checkUser")
@@ -627,6 +627,19 @@ public class UserController extends BaseController {
 			users.setOfficePhone(user.getOfficePhone());
 			users.setMobilePhone(user.getMobilePhone());
 			users.setDevFlag(user.getDevFlag());
+
+			users.setDept(user.getDept());
+			users.setDuty(user.getDuty());
+			users.setBirth(user.getBirth());
+			users.setWechat(user.getWechat());
+			users.setFacebook(user.getFacebook());
+			users.setSelfResource(user.getSelfResource());
+			users.setNeedResource(user.getNeedResource());
+			users.setCompany(user.getCompany());
+			users.setBnTypeid(user.getBnTypeid());
+			users.setCity(user.getCity());
+			users.setComDesc(user.getComDesc());
+			users.setLevel(user.getLevel());
 
             systemService.executeSql("delete from t_s_user_org where user_id=?", user.getId());
             saveUserOrgList(req, user);
@@ -741,9 +754,9 @@ public class UserController extends BaseController {
 	/**
 	 * easyuiAJAX请求数据： 用户选择角色列表
 	 * 
-	 * @param request
-	 * @param response
-	 * @param dataGrid
+	 * @param
+	 * @param
+	 * @param
 	 * @param user
 	 */
 	@RequestMapping(params = "addorupdate")
@@ -928,8 +941,8 @@ public class UserController extends BaseController {
 	/**
 	 * 测试
 	 * 
-	 * @param user
-	 * @param req
+	 * @param
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(params = "test")
@@ -992,7 +1005,7 @@ public class UserController extends BaseController {
 	/**
 	 * 用户录入
 	 * 
-	 * @param user
+	 * @param
 	 * @param req
 	 * @return
 	 */

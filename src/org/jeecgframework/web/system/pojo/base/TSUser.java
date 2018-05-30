@@ -26,8 +26,47 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	@Excel(name = "办公电话",width = 20)
 	private String officePhone;// 办公电话
 	@Excel(name = "邮箱",width = 25)
-
 	private String email;// 邮箱
+
+	@Excel(name = "部门",width = 25)
+	private String dept;//部门
+
+	@Excel(name = "职位",width = 25)
+	private String duty;//职位
+
+
+
+	@Excel(name = "生日",width = 25)
+	private java.util.Date birth;//生日
+
+	@Excel(name = "微信",width = 25)
+	private String wechat;//微信
+
+	@Excel(name = "facebook",width = 25)
+	private String facebook;//facebook
+
+	@Excel(name = "我的资源",width = 25)
+	private String selfResource;//我的资源 self_resource
+
+	@Excel(name = "需要的资源",width = 25)
+	private String needResource;//需要的资源  need_resource
+
+	@Excel(name = "公司",width = 25)
+	private String company;//公司  company
+
+	@Excel(name = "业务类型ID",width = 25)
+	private String bnTypeid;//公司  bn_type_id
+
+	@Excel(name = "所在城市",width = 25)
+	private String city;//所在城市  city
+
+	@Excel(name = "公司描述",width = 25)
+	private String comDesc;//公司描述  com_desc
+
+	@Excel(name = "用户级别",width = 25)
+	private String level;//用户级别  level
+
+
 	/**创建时间*/
 	private java.util.Date createDate;
 	/**创建人ID*/
@@ -44,6 +83,7 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	private java.lang.String portrait;
 	/**开发权限标志*/
 	private java.lang.String devFlag;
+
 	@Column(name = "dev_flag", length = 2)
 	public String getDevFlag() {
 		return devFlag;
@@ -191,4 +231,109 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	public void setPortrait(String portrait) {
 		this.portrait = portrait;
 	}
+
+
+	@Column(name ="wechat",nullable=true,length=200)
+	public String getWechat() {
+		return wechat;
+	}
+
+	public void setWechat(String wechat) {
+		this.wechat = wechat;
+	}
+	@Column(name ="facebook",nullable=true,length=200)
+	public String getFacebook() {
+		return facebook;
+	}
+
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
+	}
+	@Column(name ="self_resource",nullable=true,length=50000)
+	public String getSelfResource() {
+		return selfResource;
+	}
+
+	public void setSelfResource(String selfResource) {
+		this.selfResource = selfResource;
+	}
+	@Column(name ="need_resource",nullable=true,length=50000)
+	public String getNeedResource() {
+		return needResource;
+	}
+
+	public void setNeedResource(String needResource) {
+		this.needResource = needResource;
+	}
+	@Column(name ="company",nullable=true,length=256)
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	@Column(name ="bn_type_id",nullable=true,length=32)
+	public String getBnTypeid() {
+		return bnTypeid;
+	}
+
+	public void setBnTypeid(String bnTypeid) {
+		this.bnTypeid = bnTypeid;
+	}
+	@Column(name ="city",nullable=true,length=256)
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+	@Column(name ="com_desc",nullable=true,length=5000)
+	public String getComDesc() {
+		return comDesc;
+	}
+
+	public void setComDesc(String comDesc) {
+		this.comDesc = comDesc;
+	}
+	@Column(name ="level",nullable=true,length=5000)
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+	@Column(name ="dept",nullable=true,length=256)
+	public String getDept() {
+		return dept;
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+
+	@Column(name ="birth",nullable=true,length=50)
+	public java.util.Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(java.util.Date birth) {
+		this.birth = birth;
+	}
+
+	@Column(name ="duty",nullable=true,length=50)
+	public String getDuty() {
+		return duty;
+	}
+
+
+	public void setDuty(String duty) {
+		this.duty = duty;
+	}
+
+
 }

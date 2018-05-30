@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>用户信息</title>
-<t:base type="jquery,easyui,tools"></t:base>
+<t:base type="jquery,easyui,tools,DatePicker"></t:base>
     <script>
 <%-- //        update-start--Author:zhangguoming  Date:20140826 for：将combobox修改为combotree
         function setOrgIds() {
@@ -161,6 +161,97 @@ action="userController.do?saveUser"> <!--很鸡肋的一个设置导致不能提
                 <span class="Validform_checktip"></span>
             </td>
 		</tr>
+
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  部门: </label></td>
+            <td class="value">
+                <input class="inputxt" name="dept" value="${user.dept}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  职位: </label></td>
+            <td class="value">
+                <input class="inputxt" id="duty" name="duty" value="${user.duty}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  生日: </label></td>
+            <td class="value">
+                <input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  style="width: 150px" id="birth" name="birth" ignore="ignore"     value="<fmt:formatDate value='${user.birth}' type="date" pattern="yyyy-MM-dd"/>" />
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  微信: </label></td>
+            <td class="value">
+                <input class="inputxt" name="wechat" value="${user.wechat}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  facebook: </label></td>
+            <td class="value">
+                <input class="inputxt" name="facebook" value="${user.facebook}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  我的资源: </label></td>
+            <td class="value">
+                <input class="inputxt" name="selfResource" value="${user.selfResource}" >
+            </td>
+        </tr>
+
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  需要的资源: </label></td>
+            <td class="value">
+                <input class="inputxt" name="needResource" value="${user.needResource}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  公司: </label></td>
+            <td class="value">
+                <input class="inputxt" name="company" value="${user.company}" >
+            </td>
+        </tr>
+
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  业务类型ID: </label></td>
+            <td class="value">
+                <input class="inputxt" name="bnTypeid" value="${user.bnTypeid}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  公司描述: </label></td>
+            <td class="value">
+                <input class="inputxt" name="comDesc" value="${user.comDesc}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  所在城市: </label></td>
+            <td class="value">
+                <input class="inputxt" name="city" value="${user.city}" >
+            </td>
+        </tr>
+
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  用户级别: </label></td>
+            <td class="value">
+                <input class="inputxt" name="level" value="${user.level}" >
+            </td>
+        </tr>
+
+
+
         <tr>
             <td align="right"><label class="Validform_label"> <t:mutiLang langKey="common.common.dev"/>: </label></td>
             <td class="value">
