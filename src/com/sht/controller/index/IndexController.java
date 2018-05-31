@@ -118,4 +118,28 @@ public class IndexController {
             console.log(status);
         },
     })*/
+
+
+      /*$.ajax({
+        url: 'http://192.168.158.57:8080/api/index/test',
+                type: 'get',
+                dataType: 'json',
+                contentType:'application/json',
+                // data: JSON.stringify(postJson1),
+				*//*beforeSend : function(request) {
+					request.setRequestHeader("Authorization", "Bearer QBfEmk3a6LM6RAVfmiyOI0w5vKi8ek");
+				},*//*
+                success: function (json) {
+            console.log("调用成功");
+            console.log(json)
+					*//*var data = eval(json);
+					var result = data.result;*//*
+
+        },
+        error: function (json){
+            console.log("Error");
+            console.log(json);
+        }
+    });*/
+
 }
