@@ -358,5 +358,53 @@ public class UserRestFulController {
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         return ajaxMsg;
     }
+
+    @RequestMapping(value = "/reSetPassWordOnLine",method = RequestMethod.POST) // 用户 验证 邮箱 注册
+    @ResponseBody
+    public AjaxMsg reSetPassWordOnLine(TSUser tsUser ,String code,HttpServletResponse response,HttpServletRequest request){
+        AjaxMsg ajaxMsg = new AjaxMsg();
+        //修改密码
+        String password = oConvertUtils.getString(request.getParameter("password"));
+        String newpassword = oConvertUtils.getString(request.getParameter("newpassword"));
+        if(StringUtil.isEmpty(password)){
+            ajaxMsg.setMsg("密码不能为空!");
+            ajaxMsg.setResponsecode(HttpStatus.OK.value());
+            return ajaxMsg;
+        }
+
+        if(StringUtil.isEmpty(newpassword)){
+            ajaxMsg.setMsg("新密码不能为空!");
+            ajaxMsg.setResponsecode(HttpStatus.OK.value());
+            return ajaxMsg;
+        }
+        String temp = "";
+        String userName = tsUser.getUserName();
+        if(userName==null){
+            temp  = tsUser.getEmail();
+        }else {
+            temp = userName;
+        }
+        String passwordP = PasswordUtil.encrypt(temp, password, PasswordUtil.getStaticSalt());
+
+        List list = systemService.findHql(" from TSUser where userName='"+userName+"' and password='"+passwordP+"' ",new Object[]{});
+        TSUser tsUser1 = null;
+        if(list!=null && list.size()>0){
+             tsUser1 = (TSUser)list.get(0);
+        }
+
+        if(tsUser1==null){
+            ajaxMsg.setMsg("密码不正确!");
+            ajaxMsg.setResponsecode(HttpStatus.OK.value());
+            return ajaxMsg;
+        }
+
+
+        String newPasswordP = PasswordUtil.encrypt(temp, newpassword, PasswordUtil.getStaticSalt());
+        tsUser1.setPassword(newPasswordP);
+        systemService.updateEntitie(tsUser1);
+        ajaxMsg.setMsg("密码已经重置，请牢记密码: "+newpassword);
+        ajaxMsg.setResponsecode(HttpStatus.OK.value());
+        return ajaxMsg;
+    }
 }
 
