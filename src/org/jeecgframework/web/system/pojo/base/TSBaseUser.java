@@ -112,7 +112,7 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 //	public void setTSDepart(TSDepart TSDepart) {
 //		this.TSDepart = TSDepart;
 //	}
-	@Column(name = "username", nullable = false, length = 10)
+	@Column(name = "username", nullable = false, length = 300)
 	public String getUserName() {
 		return this.userName;
 	}

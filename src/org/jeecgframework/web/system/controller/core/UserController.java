@@ -655,7 +655,7 @@ public class UserController extends BaseController {
 			if (StringUtil.isNotEmpty(roleid)) {
 				saveRoleUser(users, roleid);
 			}
-			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+			//systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 		} else {
 			TSUser users = systemService.findUniqueByProperty(TSUser.class, "userName",user.getUserName());
 			if (users != null) {

@@ -27,7 +27,9 @@
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
 
-
+	<listener>
+		<listener-class>com.sht.restcontroller.util.SessionListener</listener-class>
+	</listener>
 
 	<!--<filter>
 		<filter-name>CORS</filter-name>

@@ -186,6 +186,103 @@ public class LoginController extends BaseController{
 		return j;
 	}
 
+	/**外部接口，登陆时候，保存用户cookie信息*/
+	public void saveLoginSuccessInfoRest(SystemService sys,MutiLangServiceI mutiLangService, HttpServletRequest request,HttpServletResponse response ,TSUser user){
+		if(this.systemService == null){
+			this.systemService =  sys;
+		}
+		if(this.mutiLangService == null){
+			this.mutiLangService =  mutiLangService;
+		}
+
+		String roles = "";
+		HttpSession session = request.getSession();
+		if (user != null) {
+			/* //获取 用户角色暂时不做
+			List<TSRoleUser> rUsers = systemService.findByProperty(TSRoleUser.class, "TSUser.id", user.getId());
+			for (TSRoleUser ru : rUsers) {
+				TSRole role = ru.getTSRole();
+				roles += role.getRoleName() + ",";
+			}
+			if (roles.length() > 0) {
+				roles = roles.substring(0, roles.length() - 1);
+			}
+		*/
+			/**cookie 的设置 */
+			Cookie JSESSIONIDCookie = new Cookie("JSESSIONID", session.getId());
+			JSESSIONIDCookie.setMaxAge(3600 * 24);//一天
+			response.addCookie(JSESSIONIDCookie);
+
+			Cookie cookie = new Cookie("JEECGINDEXSTYLE", "hplus");
+			//设置cookie有效期为一个月
+			cookie.setMaxAge(3600 * 24 * 30);
+			response.addCookie(cookie);
+
+			Cookie zIndexCookie = new Cookie("ZINDEXNUMBER", "1990");
+			zIndexCookie.setMaxAge(3600 * 24);//一天
+			response.addCookie(zIndexCookie);
+
+			Cookie browserCookie = new Cookie("BROWSER_TYPE", "Netscape");
+			zIndexCookie.setMaxAge(3600 * 24);//一天
+			response.addCookie(browserCookie);
+
+
+			//获取部门，组织机构  ID 可能多个机构
+			List list = systemService.findListbySql("select org_id as orgId from t_s_user_org where user_id='" + user.getId() + "'");
+			String orgId = "";
+			if (list != null && list.size() > 0) {
+				if (list.size() == 1) {//一个用户一个部门
+					orgId = list.get(0).toString();
+				} else {
+					//多个部门暂时 选第一个。
+					orgId = list.get(0).toString();
+				}
+			}
+
+			TSDepart currentDepart = systemService.get(TSDepart.class, orgId);
+			user.setCurrentDepart(currentDepart);
+			session.setAttribute("LOCAL_CLINET_USER",user);//
+
+
+			/*
+
+			user.setDepartid(orgId);
+
+			session.setAttribute(ResourceUtil.LOCAL_CLINET_USER, user);
+
+			String browserType = "";
+			Cookie[] cookies = request.getCookies();
+			if(cookies!=null){
+				for (int i = 0; i < cookies.length; i++) {
+					Cookie cookie = cookies[i];
+					if("BROWSER_TYPE".equals(cookie.getName())){
+						browserType = cookie.getValue();
+					}
+				}
+			}
+			session.setAttribute("brower_type", browserType);
+
+			//当前session为空 或者 当前session的用户信息与刚输入的用户信息一致时，则更新Client信息
+			Client clientOld = ClientManager.getInstance().getClient(session.getId());
+			if(clientOld == null || clientOld.getUser() ==null ||user.getUserName().equals(clientOld.getUser().getUserName())){
+				Client client = new Client();
+				client.setIp(IpUtil.getIpAddr(req));
+				client.setLogindatetime(new Date());
+				client.setUser(user);
+				ClientManager.getInstance().addClinet(session.getId(), client);
+			} else {//如果不一致，则注销session并通过session=req.getSession(true)初始化session
+				ClientManager.getInstance().removeClinet(session.getId());
+				session.invalidate();
+				session = req.getSession(true);//session初始化
+				session.setAttribute(ResourceUtil.LOCAL_CLINET_USER, user);
+				session.setAttribute("randCode",req.getParameter("randCode"));//保存验证码
+				checkuser(user,req);
+			}
+*/
+
+		}
+	}
+
     /**
      * 保存用户登录的信息，并将当前登录用户的组织机构赋值到用户实体中；
      * @param req request
@@ -206,10 +303,12 @@ public class LoginController extends BaseController{
 
         String browserType = "";
         Cookie[] cookies = req.getCookies();
-        for (int i = 0; i < cookies.length; i++) {
-			Cookie cookie = cookies[i];
-			if("BROWSER_TYPE".equals(cookie.getName())){
-				browserType = cookie.getValue();
+        if(cookies!=null){
+			for (int i = 0; i < cookies.length; i++) {
+				Cookie cookie = cookies[i];
+				if("BROWSER_TYPE".equals(cookie.getName())){
+					browserType = cookie.getValue();
+				}
 			}
 		}
         session.setAttribute("brower_type", browserType);
@@ -234,7 +333,7 @@ public class LoginController extends BaseController{
         
         
         // 添加登陆日志
-        systemService.addLog(message, Globals.Log_Type_LOGIN, Globals.Log_Leavel_INFO);
+       // systemService.addLog(message, Globals.Log_Type_LOGIN, Globals.Log_Leavel_INFO);
     }
 
 
