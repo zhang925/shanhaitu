@@ -93,7 +93,7 @@ public class UserRestFulController {
     }
 
     /**
-     *  根据ID获取当前用户的实体
+     *  根据ID获取当前 在线 用户的实体 需要 SESSIONID 参数，必须是大写
      * @param response
      * @param request
      * @return
@@ -107,19 +107,44 @@ public class UserRestFulController {
         String msg = "success";
         Object responseCode = HttpStatus.OK.value();
         UserInfo userInfo = null;
-        /*if(UtilSht.isHavePower( request)){//session 有效 session 有效期 判断暂时略过
-            userInfo = UtilSht.getUserInfoByID(systemService,request);
+        if(UtilShtRest.isHavePower( request)){//session 有效 session 有效期 判断暂时略过
+            userInfo = UtilShtRest.getUserInfoByID(systemService,request);
         }else{
-            msg = "登陆超时";
-            responseCode =  HttpStatus.REQUEST_TIMEOUT.value();
-        }*/
-        userInfo = UtilShtRest.getUserInfoByID(systemService,request);
+            ajaxMsg.setMsg("登陆超时");
+            ajaxMsg.setResponsecode(HttpStatus.REQUEST_TIMEOUT.value());
+            return ajaxMsg;
+        }
         ajaxMsg.setMsg(msg);
         ajaxMsg.setModel(userInfo);
         ajaxMsg.setResponsecode(responseCode);
         return ajaxMsg;
     }
 
+
+    /**
+     *  根据ID获取 用户的实体
+     * @param
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/{id}",method = RequestMethod.GET)
+    @ResponseBody
+    public AjaxMsg userInfo(@PathVariable String id ){
+        AjaxMsg ajaxMsg = new AjaxMsg();
+        String msg = "success";
+        Object responseCode = HttpStatus.OK.value();
+        if(StringUtil.isEmpty(id)){
+            ajaxMsg.setMsg("id不能为空");
+            ajaxMsg.setResponsecode(responseCode);
+            return ajaxMsg;
+        }
+        TSUser tsUser = systemService.getEntity(TSUser.class,id);
+        UserInfo userInfo = new UserInfo(tsUser);
+        ajaxMsg.setMsg(msg);
+        ajaxMsg.setModel(userInfo);
+        ajaxMsg.setResponsecode(responseCode);
+        return ajaxMsg;
+    }
 
     /**
      * 根据用户名字 获取 用户实体

@@ -49,7 +49,7 @@ public class UtilShtRest {
         if(session==null){//sessionID 无效，过期了或者传的值不对
             return  false;
         }
-        TSUser user = (TSUser) session.getAttribute("LOCAL_CLINET_USER");
+        //TSUser user = (TSUser) session.getAttribute("LOCAL_CLINET_USER");
         return  true;
     }
 
