@@ -1,5 +1,6 @@
 package com.sht.restcontroller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sht.restcontroller.tempentity.AjaxMsg;
 import com.sht.restcontroller.tempentity.UserInfo;
 import com.sht.restcontroller.util.MySessionContext;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -69,13 +71,23 @@ public class UserRestFulController {
           return ajaxMsg;
       }
 
+
+
+
+
         //登陆 系统
         LoginController lc = new LoginController();
         lc.saveLoginSuccessInfoRest(systemService,mutiLangService,request,response,  u);//登陆系统 日志
 
         UserInfo userInfo = new UserInfo(u);//最终要返回给页面的 用户信息
-        ajaxMsg.setMsg(request.getSession().getId()); //这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 SESSIONID
-        ajaxMsg.setModel(userInfo);
+        //ajaxMsg.setMsg(request.getSession().getId()); //这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 SESSIONID
+
+        JSONObject obj = new JSONObject();
+        obj.put("SESSIONID", request.getSession().getId());
+        obj.put("result", userInfo);
+        ajaxMsg.setMsg("success");
+
+        ajaxMsg.setModel(obj);
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         return ajaxMsg;
     }
@@ -89,6 +101,8 @@ public class UserRestFulController {
     @RequestMapping(value = "/userInfo",method = RequestMethod.POST)
     @ResponseBody
     public AjaxMsg userInfo( HttpServletResponse response, HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+
         AjaxMsg ajaxMsg = new AjaxMsg();
         String msg = "success";
         Object responseCode = HttpStatus.OK.value();
@@ -213,9 +227,17 @@ public class UserRestFulController {
         //锁定 用户 已经存在
         Integer radomCode = (int)((Math.random()*9+1)*100000);
         UtilEmail.sendEmailForSht(tsUser.getEmail(),radomCode);
-        ajaxMsg.setMsg(request.getSession().getId().toString());//这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 CODESESSIONID
-        request.getSession().setAttribute("CHECKEMAILCODE",radomCode);
+        request.getSession().setAttribute("CHECKCODE",radomCode);
+
+        //ajaxMsg.setMsg(request.getSession().getId().toString());//这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 CODESESSIONID
+
+
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
+        JSONObject obj = new JSONObject();
+        obj.put("CHECKSESSIONID", request.getSession().getId());
+        ajaxMsg.setMsg("success");
+        ajaxMsg.setModel(obj);
+
         return ajaxMsg;
     }
 
@@ -226,7 +248,7 @@ public class UserRestFulController {
     public AjaxMsg checkEmail(TSUser tsUser ,String code,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
         //前端 cookie 春一个 EMAILSESSIONID 验证的时候 传过来
-        String codeSessionID = request.getParameter("EMAILSESSIONID");//后去浏览器 的 codesessionid 的 cookie
+        String codeSessionID = request.getParameter("CHECKSESSIONID");//后去浏览器 的 codesessionid 的 cookie
         String msg = "success";
         UserInfo userInfo = null;
         if(StringUtil.isEmpty(codeSessionID)){//没有获取到
@@ -235,7 +257,7 @@ public class UserRestFulController {
         }else {
             HttpSession session = MySessionContext.getSession(codeSessionID);//获取 code的session
             if(session!=null){
-                Object CHECKEMAILCODE = session.getAttribute("CHECKEMAILCODE");
+                Object CHECKEMAILCODE = session.getAttribute("CHECKCODE");
                 if(StringUtil.isEmpty(code)){//用户没有传过来验证码。
                     msg = "验证码不能为空！";
                 }else if(code.equals(CHECKEMAILCODE.toString())){//验证通过
@@ -291,8 +313,14 @@ public class UserRestFulController {
         }
         Integer radomCode = (int)((Math.random()*9+1)*100000);
         UtilEmail.sendEmailForSht(tsUser.getEmail(),radomCode);
-        ajaxMsg.setMsg(request.getSession().getId().toString());//这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 CODESESSIONID
-        request.getSession().setAttribute("CKEMAILRECODE",radomCode);
+
+        request.getSession().setAttribute("CHECKRECODE",radomCode);
+
+        //ajaxMsg.setMsg(request.getSession().getId().toString());//这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 CODESESSIONID
+        JSONObject obj = new JSONObject();
+        obj.put("CHECKRESESSION", request.getSession().getId());
+        ajaxMsg.setMsg("success");
+        ajaxMsg.setModel(obj);
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         return ajaxMsg;
     }
@@ -304,7 +332,7 @@ public class UserRestFulController {
     public AjaxMsg ckEmailForRe(TSUser tsUser ,String code,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
         //前端 cookie 春一个 RESESSIONID 验证的时候 传过来
-        String codeSessionID = request.getParameter("REEMAILSESSIONID");//后去浏览器 的 codesessionid 的 cookie RESESSIONID
+        String codeSessionID = request.getParameter("CHECKRESESSION");//后去浏览器 的 codesessionid 的 cookie RESESSIONID
         String msg = "success";
         UserInfo userInfo = null;
         if(StringUtil.isEmpty(codeSessionID)){//没有获取到
@@ -314,7 +342,7 @@ public class UserRestFulController {
             HttpSession session = MySessionContext.getSession(codeSessionID);//获取 code的session
             if(session!=null){
                 //从上一个session 中读取 code
-                Object CHECKEMAILFORGET = session.getAttribute("CKEMAILRECODE");
+                Object CHECKEMAILFORGET = session.getAttribute("CHECKRECODE");
                 if(StringUtil.isEmpty(code)){//用户没有传过来验证码。
                     msg = "验证码不能为空！";
                 }else if(code.equals(CHECKEMAILFORGET.toString())){//验证通过
