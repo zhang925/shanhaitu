@@ -19,7 +19,7 @@
    <t:dgDelOpt title="删除" url="busInspectionController.do?del&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"/>
    <t:dgToolBar title="录入" icon="icon-add" url="busInspectionController.do?addorupdate" funname="add"></t:dgToolBar>
    <t:dgToolBar title="编辑" icon="icon-edit" url="busInspectionController.do?addorupdate" funname="update"></t:dgToolBar>
-   <t:dgToolBar title="查看" icon="icon-search" url="busInspectionController.do?addorupdate" funname="detail"></t:dgToolBar>
+   <t:dgToolBar title="查看" icon="icon-search" height="80%" url="busInspectionController.do?addorupdate" funname="detail"></t:dgToolBar>
   </t:datagrid>
   </div>
  </div>
