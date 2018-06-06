@@ -66,13 +66,13 @@
 		      <span class="Validform_checktip"></span>
 		    </div>
 			<div class="form">
-		      <label class="Validform_label">状体:</label>
+		      <label class="Validform_label"> 状态:</label>
 		      <input class="inputxt" id="status" name="status" ignore="ignore"   value="${investigateReportPage.status}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 			<div class="form">
 		      <label class="Validform_label">排序:</label>
-		      <input class="inputxt" id="order" name="order" ignore="ignore"   value="${investigateReportPage.order}" />
+		      <input class="inputxt" id="orders" name="orders" ignore="ignore"   value="${investigateReportPage.orders}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 	    </fieldset>

@@ -53,10 +53,10 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	private java.util.Date updatedTime;
 	/**格式*/
 	private java.lang.String format;
-	/**状体*/
+	/** 状态*/
 	private java.lang.String status;
 	/**排序*/
-	private java.lang.String order;
+	private java.lang.String orders;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -256,7 +256,7 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	}
 	/**
 	 *方法: 取得java.lang.String
-	 *@return: java.lang.String  状体
+	 *@return: java.lang.String   状态
 	 */
 	@Column(name ="STATUS",nullable=true,length=11)
 	public java.lang.String getStatus(){
@@ -265,7 +265,7 @@ public class InvestigateReportEntity implements java.io.Serializable {
 
 	/**
 	 *方法: 设置java.lang.String
-	 *@param: java.lang.String  状体
+	 *@param: java.lang.String   状态
 	 */
 	public void setStatus(java.lang.String status){
 		this.status = status;
@@ -274,16 +274,16 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  排序
 	 */
-	@Column(name ="ORDER",nullable=true,length=11)
-	public java.lang.String getOrder(){
-		return this.order;
+	@Column(name ="ORDERS",nullable=true,length=11)
+	public java.lang.String getOrders(){
+		return this.orders;
 	}
 
 	/**
 	 *方法: 设置java.lang.String
 	 *@param: java.lang.String  排序
 	 */
-	public void setOrder(java.lang.String order){
-		this.order = order;
+	public void setOrders(java.lang.String orders){
+		this.orders = orders;
 	}
 }

@@ -7,7 +7,7 @@
    <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
    <t:dgCol title="摘要" field="title"   width="120"></t:dgCol>
    <t:dgCol title="分类ID" field="categoryId"   width="120"></t:dgCol>
-   <t:dgCol title="交付方式" field="delivery"   width="120"></t:dgCol>
+   <t:dgCol title="交付方式" field="delivery"   width="120"></t:dgCol>f
    <t:dgCol title="摘要" field="summary"   width="120"></t:dgCol>
    <t:dgCol title="价格" field="price"   width="120"></t:dgCol>
    <t:dgCol title="价格单位" field="unit"   width="120"></t:dgCol>
@@ -16,8 +16,8 @@
    <t:dgCol title="创建时间" field="createdTime" formatter="yyyy-MM-dd hh:mm:ss"  width="120"></t:dgCol>
    <t:dgCol title="更新时间" field="updatedTime" formatter="yyyy-MM-dd hh:mm:ss"  width="120"></t:dgCol>
    <t:dgCol title="格式" field="format"   width="120"></t:dgCol>
-   <t:dgCol title="状体" field="status"   width="120"></t:dgCol>
-   <t:dgCol title="排序" field="order"   width="120"></t:dgCol>
+   <t:dgCol title=" 状态" field="status"   width="120"></t:dgCol>
+   <t:dgCol title="排序" field="orders"   width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="删除" url="investigateReportController.do?del&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"/>
    <t:dgToolBar title="录入" icon="icon-add" url="investigateReportController.do?addorupdate" funname="add"></t:dgToolBar>
