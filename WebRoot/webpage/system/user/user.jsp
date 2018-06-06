@@ -111,6 +111,8 @@ action="userController.do?saveUser"> <!--很鸡肋的一个设置导致不能提
                 </td>
 			</tr>
 		</c:if>
+
+
 		<tr>
 			<td align="right"><label class="Validform_label"> <t:mutiLang langKey="common.department"/>: </label></td>
 			<td class="value">
@@ -140,6 +142,17 @@ action="userController.do?saveUser"> <!--很鸡肋的一个设置导致不能提
                 <span class="Validform_checktip"><t:mutiLang langKey="role.muti.select"/></span>
             </td>
 		</tr>
+
+        <tr>
+            <td align="right"><label class="Validform_label"> <t:mutiLang langKey="common.common.dev"/>: </label></td>
+            <td class="value">
+
+                <t:dictSelect id="devFlag"  field="devFlag" typeGroupCode="dev_flag" hasLabel="false" defaultVal="${user.devFlag}" type="radio"></t:dictSelect>
+                <span class="Validform_checktip"></span>
+            </td>
+        </tr>
+
+
 		<tr>
 			<td align="right" nowrap><label class="Validform_label">  <t:mutiLang langKey="common.phone"/>: </label></td>
 			<td class="value">
@@ -174,6 +187,13 @@ action="userController.do?saveUser"> <!--很鸡肋的一个设置导致不能提
             <td align="right" nowrap><label class="Validform_label">  职位: </label></td>
             <td class="value">
                 <input class="inputxt" id="duty" name="duty" value="${user.duty}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  行业: </label></td>
+            <td class="value">
+                <input class="inputxt" name="hangYe" value="${user.hangYe}" >
             </td>
         </tr>
 
@@ -242,6 +262,14 @@ action="userController.do?saveUser"> <!--很鸡肋的一个设置导致不能提
             </td>
         </tr>
 
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  登陆设备标示: </label></td>
+            <td class="value">
+                <input class="inputxt" name="hwCity" value="${user.hwCity}" >
+            </td>
+        </tr>
+
+
 
         <tr>
             <td align="right" nowrap><label class="Validform_label">  用户级别: </label></td>
@@ -250,16 +278,37 @@ action="userController.do?saveUser"> <!--很鸡肋的一个设置导致不能提
             </td>
         </tr>
 
-
-
         <tr>
-            <td align="right"><label class="Validform_label"> <t:mutiLang langKey="common.common.dev"/>: </label></td>
+            <td align="right" nowrap><label class="Validform_label">  性别: </label></td>
             <td class="value">
-
-                <t:dictSelect id="devFlag" field="devFlag" typeGroupCode="dev_flag" hasLabel="false" defaultVal="${user.devFlag}" type="radio"></t:dictSelect>
-                <span class="Validform_checktip"></span>
+                <input class="inputxt" name="sex" value="${user.sex}" >
             </td>
         </tr>
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  登陆设备标示: </label></td>
+            <td class="value">
+                <input class="inputxt" name="loginType" value="${user.loginType}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  业务和优势: </label></td>
+            <td class="value">
+                <input class="inputxt" name="ywhys" value="${user.ywhys}" >
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right" nowrap><label class="Validform_label">  公司规模: </label></td>
+            <td class="value">
+                <input class="inputxt" name="gsgm" value="${user.gsgm}" >
+            </td>
+        </tr>
+
+
+
+
+
 	</table>
 </t:formvalid>
 </body>

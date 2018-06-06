@@ -47,9 +47,24 @@ public class UserInfo {
 
     private String status;//用户级别  status  1：在线,2：离线,0：禁用 3：手机 4：PC 5：其他
 
+
     private String level;//用户级别  level
 
     private String createDate;/**创建时间*/
+
+
+    private String sex;//性别
+
+    private String hwCity;//海外地址  hwCity
+
+    private String loginType;//登陆设备标示  loginType
+
+    private String hangYe;//行业  hangYe
+
+    private String ywhys;//业务和优势  ywhys
+
+    private String gsgm;//公司规模  ywhys
+
 
     public UserInfo(){
 
@@ -81,6 +96,14 @@ public class UserInfo {
         if(tsUser.getCreateDate()!=null){
             this.createDate = sdf2.format(tsUser.getCreateDate()) ;
         }
+
+        this.sex = tsUser.getSex();
+        this.hwCity = tsUser.getHwCity();
+        this.loginType = tsUser.getLoginType();
+        this.hangYe = tsUser.getHangYe();
+        this.ywhys = tsUser.getYwhys();
+        this.gsgm = tsUser.getGsgm();
+
     }
 
     public String getId() {
@@ -249,5 +272,53 @@ public class UserInfo {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getHwCity() {
+        return hwCity;
+    }
+
+    public void setHwCity(String hwCity) {
+        this.hwCity = hwCity;
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
+
+    public String getHangYe() {
+        return hangYe;
+    }
+
+    public void setHangYe(String hangYe) {
+        this.hangYe = hangYe;
+    }
+
+    public String getYwhys() {
+        return ywhys;
+    }
+
+    public void setYwhys(String ywhys) {
+        this.ywhys = ywhys;
+    }
+
+    public String getGsgm() {
+        return gsgm;
+    }
+
+    public void setGsgm(String gsgm) {
+        this.gsgm = gsgm;
     }
 }

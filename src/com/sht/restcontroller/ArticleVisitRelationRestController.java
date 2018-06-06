@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/article/relation")
+@RequestMapping("/article/visit")
 /**
  * 文章访问渠道   外部接口
  */
