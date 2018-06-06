@@ -31,7 +31,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserRestFulController {
     @Autowired
