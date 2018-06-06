@@ -33,6 +33,9 @@ public class ArtiCategoryEntity implements java.io.Serializable {
 	private java.lang.String id;
 	/**分类名字*/
 	private java.lang.String categoryName;
+
+	/**排序*/
+	private java.lang.Integer orders;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -69,5 +72,14 @@ public class ArtiCategoryEntity implements java.io.Serializable {
 	 */
 	public void setCategoryName(java.lang.String categoryName){
 		this.categoryName = categoryName;
+	}
+
+	@Column(name ="ORDERS",nullable=true,length=11)
+	public Integer getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Integer orders) {
+		this.orders = orders;
 	}
 }
