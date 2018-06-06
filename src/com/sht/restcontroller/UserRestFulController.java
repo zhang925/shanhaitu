@@ -101,8 +101,8 @@ public class UserRestFulController {
     @RequestMapping(value = "/userInfo",method = RequestMethod.POST)
     @ResponseBody
     public AjaxMsg userInfo( HttpServletResponse response, HttpServletRequest request){
-        Cookie[] cookies = request.getCookies();
-
+        //Cookie[] cookies = request.getCookies();
+        //String cookie = request.getParameter("cookie");
         AjaxMsg ajaxMsg = new AjaxMsg();
         String msg = "success";
         Object responseCode = HttpStatus.OK.value();

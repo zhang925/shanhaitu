@@ -17,12 +17,14 @@ public class CORSFilter implements Filter {
 
         response.setHeader("Access-Control-Allow-Methods","POST,GET,OPTIONS,DELETE");
         response.setHeader("Access-Control-Max-Age","3600");
-        response.setHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept,Authorization");
+        response.setHeader("Access-Control-Allow-Headers","Origin,No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, userId, token,cookie");
         //response.setHeader("","");
-        //response.setHeader("","");
+        response.setHeader("Access-Control-Allow-Headers","*");
         //response.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization");
         response.setHeader("Access-Control-Allow-Credentials","true");
         chain.doFilter(req, resp);
+
+
     }
 
     public void init(FilterConfig config) throws ServletException {

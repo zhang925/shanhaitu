@@ -1,17 +1,11 @@
 package com.sht.restcontroller;
 
-import com.sht.entity.articategory.ArtiCategoryEntity;
+import com.sht.entity.comment.CommentEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
-import com.sht.restcontroller.util.UtilShtRest;
-import com.sht.service.articlenews.ArticleNewsServiceI;
 import org.jeecgframework.core.util.StringUtil;
-import org.jeecgframework.web.system.pojo.base.TSUser;
-import org.jeecgframework.web.system.service.MutiLangServiceI;
 import org.jeecgframework.web.system.service.SystemService;
-import org.jeecgframework.web.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/article/category")
+@RequestMapping("/comment")
 /**
- * 文章分类的外部接口
+ *  评论 外部接口
  */
-public class ArticleCategoryRestController {
+public class CommentRestController {
 
     @Autowired
     private SystemService systemService;
@@ -32,11 +26,12 @@ public class ArticleCategoryRestController {
 
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
-    public AjaxMsg list(ArtiCategoryEntity artiCategoryEntity, HttpServletResponse response, HttpServletRequest request){
+    public AjaxMsg list(CommentEntity commentEntity, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        List<ArtiCategoryEntity> list = new ArrayList<ArtiCategoryEntity>();
-        list = systemService.getList(ArtiCategoryEntity.class);
+        List<CommentEntity> list = new ArrayList<CommentEntity>();
+        list = systemService.getList(CommentEntity.class);
         //
+
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         ajaxMsg.setModel(list);
@@ -47,66 +42,66 @@ public class ArticleCategoryRestController {
     @ResponseBody
     public AjaxMsg info(@PathVariable String id, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        ArtiCategoryEntity artiCategoryEntity = new ArtiCategoryEntity();
+        CommentEntity commentEntity = new CommentEntity();
         if(StringUtil.isEmpty(id)){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
         }
-        artiCategoryEntity = systemService.getEntity(ArtiCategoryEntity.class,id);
+        commentEntity = systemService.getEntity(CommentEntity.class,id);
         //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(artiCategoryEntity);
+        ajaxMsg.setModel(commentEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg save(ArtiCategoryEntity artiCategoryEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg save(CommentEntity commentEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
 
 
 
-        systemService.save(artiCategoryEntity);
+        systemService.save(commentEntity);
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(artiCategoryEntity);
+        ajaxMsg.setModel(commentEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg update(ArtiCategoryEntity artiCategoryEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg update(CommentEntity commentEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        if(artiCategoryEntity==null  || artiCategoryEntity.getId()==null){
+        if(commentEntity==null  || commentEntity.getId()==null){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
         }
-        systemService.updateEntitie(artiCategoryEntity);
+        systemService.updateEntitie(commentEntity);
         //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(artiCategoryEntity);
+        ajaxMsg.setModel(commentEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg delete(ArtiCategoryEntity artiCategoryEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg delete(CommentEntity commentEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        if(artiCategoryEntity==null  || artiCategoryEntity.getId()==null){
+        if(commentEntity==null  || commentEntity.getId()==null){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
             return ajaxMsg;
         }
         //判断该实体是否存在
-        ArtiCategoryEntity temp = systemService.getEntity(ArtiCategoryEntity.class,artiCategoryEntity.getId());
+        CommentEntity temp = systemService.getEntity(CommentEntity.class,commentEntity.getId());
         if(temp==null || temp.getId()==null){
             ajaxMsg.setMsg("该实体不存在！");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
             return ajaxMsg;
         }
-        systemService.deleteEntityById(ArtiCategoryEntity.class,artiCategoryEntity.getId());
+        systemService.deleteEntityById(CommentEntity.class,commentEntity.getId());
 
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());

@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -45,7 +46,7 @@ public class ArticleNewsRestController {
         AjaxMsg ajaxMsg = new AjaxMsg();
         List<ArticleNewsEntity> list = new ArrayList<ArticleNewsEntity>();
         list = articleNewsService.getList(ArticleNewsEntity.class);
-        //需要分页？
+        //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         ajaxMsg.setModel(list);
@@ -62,7 +63,7 @@ public class ArticleNewsRestController {
             ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
         }
         articleNewsEntity = articleNewsService.getEntity(ArticleNewsEntity.class,id);
-        //需要分页？
+        //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         ajaxMsg.setModel(articleNewsEntity);
@@ -73,8 +74,17 @@ public class ArticleNewsRestController {
     @ResponseBody
     public AjaxMsg save(ArticleNewsEntity articleNewsEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
+
+        //根据前端传来的cookiename获取 新建人信息
+        String userName = request.getParameter("userName");
+        TSUser tsUser =  UtilShtRest.getTSUserByUserName(systemService,userName);
+        if(tsUser!=null && tsUser.getId()!=null){
+            articleNewsEntity.setCreator(tsUser.getRealName());
+            articleNewsEntity.setCreatorId(tsUser.getId());
+        }
+        articleNewsEntity.setCreatedTime(new Date());
+
         articleNewsService.save(articleNewsEntity);
-        //需要分页？
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         ajaxMsg.setModel(articleNewsEntity);
@@ -90,7 +100,7 @@ public class ArticleNewsRestController {
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
         }
         articleNewsService.updateEntitie(articleNewsEntity);
-        //需要分页？
+
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         ajaxMsg.setModel(articleNewsEntity);
@@ -105,8 +115,16 @@ public class ArticleNewsRestController {
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
         }
+        //判断该实体是否存在
+        ArticleNewsEntity temp = systemService.getEntity(ArticleNewsEntity.class,articleNewsEntity.getId());
+        if(temp==null || temp.getId()==null){
+            ajaxMsg.setMsg("该实体不存在！");
+            ajaxMsg.setResponsecode(HttpStatus.OK.value());
+            return ajaxMsg;
+        }
+
         articleNewsService.deleteEntityById(ArticleNewsEntity.class,articleNewsEntity.getId());
-        //需要分页？
+        //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         ajaxMsg.setModel(articleNewsEntity);

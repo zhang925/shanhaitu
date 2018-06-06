@@ -14,6 +14,8 @@ import java.util.List;
 public class UtilShtRest {
 
 
+
+
     /**
      * 根据 用户名 获取 用户
      * */
@@ -28,6 +30,9 @@ public class UtilShtRest {
 
     public static TSUser getTSUserByUserName(SystemService systemService,String userName){
         TSUser user = new TSUser();
+        if(StringUtil.isEmpty(userName)){
+            return user;
+        }
         List<TSUser> list = systemService.findHql(" from TSUser where userName='"+userName+"' ", new Object[]{});
         if(list!=null && list.size()>0){
             user = list.get(0);
