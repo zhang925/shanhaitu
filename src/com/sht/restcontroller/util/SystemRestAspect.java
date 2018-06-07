@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.context.request.ServletWebRequest;
 
 /**
  *
@@ -42,8 +45,7 @@ public class SystemRestAspect{
 
     private static final Logger logger = LoggerFactory.getLogger(SystemRestAspect.class);
 
-    @Autowired
-    private HttpServletRequest request;
+
 
     private Date beforeDate;
     private Date afterDate;
@@ -70,6 +72,16 @@ public class SystemRestAspect{
         //判断用户是否 带 token
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Map map = new HashMap();
+        ServletWebRequest servletContainer = (ServletWebRequest)RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request2 = servletContainer.getRequest();
+        HttpServletResponse response = servletContainer.getResponse();
+
+
+        System.out.println();
+
+
+
 
 
     }

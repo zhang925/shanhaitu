@@ -3,6 +3,7 @@ package com.sht.restcontroller;
 import com.alibaba.fastjson.JSONObject;
 import com.sht.entity.question.QuestionEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
+import com.sht.restcontroller.util.RestAuthority;
 import com.sht.restcontroller.util.UtilSht;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.web.system.service.SystemService;
@@ -30,6 +31,7 @@ public class QuestionRestController {
     /***分页获取list*/
     @RequestMapping(value = "/list")
     @ResponseBody
+    @RestAuthority
     public AjaxMsg list(QuestionEntity questionEntity, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
         List<QuestionEntity> list = new ArrayList<QuestionEntity>();
