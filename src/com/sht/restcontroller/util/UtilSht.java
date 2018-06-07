@@ -15,7 +15,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -59,5 +61,27 @@ public class UtilSht {
         return  value;
     }
 
+
+    /**
+     *  这样能保持当个用户毫秒级不存在数字误差
+     * @param userid
+     * @return
+     */
+    public static  String createOrderIDByUserID(String userid){
+        String redomCode = "";
+        if(userid==null || "".equals(userid)){//用户id为空
+            return redomCode;
+        }
+        // 26 位
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        Object obj = sdf.format(new Date());
+       // Object obj = Math.abs(System.currentTimeMillis());
+
+        // 22 位的，安全等级到 用户单次操作 1毫秒
+        int code = Integer.valueOf(Math.abs(userid.hashCode()));
+
+        redomCode =  obj  + "" + code ;
+        return redomCode;
+    }
 
 }

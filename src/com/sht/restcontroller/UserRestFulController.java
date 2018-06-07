@@ -82,18 +82,20 @@ public class UserRestFulController {
         UserInfo userInfo = new UserInfo(u);//最终要返回给页面的 用户信息
         //ajaxMsg.setMsg(request.getSession().getId()); //这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 SESSIONID
 
-        JSONObject obj = new JSONObject();
+       /* JSONObject obj = new JSONObject();
         obj.put("SESSIONID", request.getSession().getId());
-        obj.put("result", userInfo);
+        obj.put("result", userInfo);*/
+
         ajaxMsg.setMsg("success");
 
-        ajaxMsg.setModel(obj);
+        ajaxMsg.setModel(userInfo);
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         return ajaxMsg;
     }
 
     /**
      *  根据ID获取当前 在线 用户的实体 需要 SESSIONID 参数，必须是大写
+     *  预留方法，暂时不用了。
      * @param response
      * @param request
      * @return
@@ -127,7 +129,7 @@ public class UserRestFulController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/info/{id}",method = RequestMethod.GET)
     @ResponseBody
     public AjaxMsg userInfo(@PathVariable String id ){
         AjaxMsg ajaxMsg = new AjaxMsg();
