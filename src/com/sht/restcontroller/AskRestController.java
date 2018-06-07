@@ -1,6 +1,6 @@
 package com.sht.restcontroller;
 
-import com.sht.entity.articlevisitrelation.ArticleVisitRelationEntity;
+import com.sht.entity.ask.AskEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.web.system.service.SystemService;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/article/visit")
+@RequestMapping("/ask")
 /**
- * 文章访问渠道   外部接口
+ *  提问问题  外部接口
  */
-public class ArticleVisitRelationRestController {
+public class AskRestController {
 
     @Autowired
     private SystemService systemService;
@@ -26,10 +26,10 @@ public class ArticleVisitRelationRestController {
 
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
-    public AjaxMsg list(ArticleVisitRelationEntity articleVisitRelationEntity, HttpServletResponse response, HttpServletRequest request){
+    public AjaxMsg list(AskEntity askEntity, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        List<ArticleVisitRelationEntity> list = new ArrayList<ArticleVisitRelationEntity>();
-        list = systemService.getList(ArticleVisitRelationEntity.class);
+        List<AskEntity> list = new ArrayList<AskEntity>();
+        list = systemService.getList(AskEntity.class);
         //
 
         ajaxMsg.setMsg("success");
@@ -42,66 +42,66 @@ public class ArticleVisitRelationRestController {
     @ResponseBody
     public AjaxMsg info(@PathVariable String id, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        ArticleVisitRelationEntity articleVisitRelationEntity = new ArticleVisitRelationEntity();
+        AskEntity askEntity = new AskEntity();
         if(StringUtil.isEmpty(id)){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
         }
-        articleVisitRelationEntity = systemService.getEntity(ArticleVisitRelationEntity.class,id);
+        askEntity = systemService.getEntity(AskEntity.class,id);
         //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(articleVisitRelationEntity);
+        ajaxMsg.setModel(askEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg save(ArticleVisitRelationEntity articleVisitRelationEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg save(AskEntity askEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
 
 
 
-        systemService.save(articleVisitRelationEntity);
+        systemService.save(askEntity);
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(articleVisitRelationEntity);
+        ajaxMsg.setModel(askEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg update(ArticleVisitRelationEntity articleVisitRelationEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg update(AskEntity askEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        if(articleVisitRelationEntity==null  || articleVisitRelationEntity.getId()==null){
+        if(askEntity==null  || askEntity.getId()==null){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
         }
-        systemService.updateEntitie(articleVisitRelationEntity);
+        systemService.updateEntitie(askEntity);
         //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(articleVisitRelationEntity);
+        ajaxMsg.setModel(askEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg delete(ArticleVisitRelationEntity articleVisitRelationEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg delete(AskEntity askEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        if(articleVisitRelationEntity==null  || articleVisitRelationEntity.getId()==null){
+        if(askEntity==null  || askEntity.getId()==null){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
             return ajaxMsg;
         }
         //判断该实体是否存在
-        ArticleVisitRelationEntity temp = systemService.getEntity(ArticleVisitRelationEntity.class,articleVisitRelationEntity.getId());
+        AskEntity temp = systemService.getEntity(AskEntity.class,askEntity.getId());
         if(temp==null || temp.getId()==null){
             ajaxMsg.setMsg("该实体不存在！");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
             return ajaxMsg;
         }
-        systemService.deleteEntityById(ArticleVisitRelationEntity.class,articleVisitRelationEntity.getId());
+        systemService.deleteEntityById(AskEntity.class,askEntity.getId());
 
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());

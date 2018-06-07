@@ -8,7 +8,7 @@
    <t:dgCol title="文章新闻ID" field="articleId"   width="120"></t:dgCol>
    <t:dgCol title="发布时间" field="publishTime" formatter="yyyy-MM-dd hh:mm:ss"  width="120"></t:dgCol>
    <t:dgCol title="下架时间" field="closingTime" formatter="yyyy-MM-dd hh:mm:ss"  width="120"></t:dgCol>
-   <t:dgCol title="排序" field="order"   width="120"></t:dgCol>
+   <t:dgCol title="排序" field="orders"   width="120"></t:dgCol>
    <t:dgCol title="文章状态" field="status"   width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="删除" url="hotArticleController.do?del&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"/>

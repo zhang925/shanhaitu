@@ -35,6 +35,8 @@ public class TSBaseUser extends IdEntity implements java.io.Serializable {
 	
 	private byte[] signature;// 签名文件
 
+
+
 	@Excel(name = "组织机构编码(多个组织机构编码用逗号分隔，非必填)",width = 50)
 	private String departid;
 

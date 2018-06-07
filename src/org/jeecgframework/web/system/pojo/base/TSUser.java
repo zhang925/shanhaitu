@@ -28,6 +28,10 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	@Excel(name = "邮箱",width = 25)
 	private String email;// 邮箱
 
+
+	@Excel(name = "性别",width = 20)
+	private String sex;//性别
+
 	@Excel(name = "部门",width = 25)
 	private String dept;//部门
 
@@ -60,11 +64,26 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	@Excel(name = "所在城市",width = 25)
 	private String city;//所在城市  city
 
+	@Excel(name = "海外地址",width = 25)
+	private String hwCity;//海外地址  hwCity
+
 	@Excel(name = "公司描述",width = 25)
 	private String comDesc;//公司描述  com_desc
 
 	@Excel(name = "用户级别",width = 25)
 	private String level;//用户级别  level
+
+	@Excel(name = "登陆设备标示",width = 25)
+	private String loginType;//登陆设备标示  loginType
+
+	@Excel(name = "行业",width = 25)
+	private String hangYe;//行业  hangYe
+
+	@Excel(name = "业务和优势",width = 25)
+	private String ywhys;//业务和优势  ywhys
+
+	@Excel(name = "公司规模",width = 25)
+	private String gsgm;//公司规模  ywhys
 
 
 	/**创建时间*/
@@ -83,6 +102,8 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 	private java.lang.String portrait;
 	/**开发权限标志*/
 	private java.lang.String devFlag;
+
+
 
 	@Column(name = "dev_flag", length = 2)
 	public String getDevFlag() {
@@ -335,5 +356,57 @@ public class TSUser extends TSBaseUser implements java.io.Serializable {
 		this.duty = duty;
 	}
 
+	@Column(name ="sex",nullable=true,length=50)
+	public String getSex() {
+		return sex;
+	}
 
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	@Column(name ="login_type",nullable=true,length=50)
+	public String getLoginType() {
+		return loginType;
+	}
+
+	public void setLoginType(String loginType) {
+		this.loginType = loginType;
+	}
+
+	@Column(name ="hwcity",nullable=true,length=50)
+	public String getHwCity() {
+		return hwCity;
+	}
+
+	public void setHwCity(String hwCity) {
+		this.hwCity = hwCity;
+	}
+
+	@Column(name ="hangye",nullable=true,length=50)
+	public String getHangYe() {
+		return hangYe;
+	}
+
+	public void setHangYe(String hangYe) {
+		this.hangYe = hangYe;
+	}
+
+	@Column(name ="ywhys",nullable=true,length=50)
+	public String getYwhys() {
+		return ywhys;
+	}
+
+	public void setYwhys(String ywhys) {
+		this.ywhys = ywhys;
+	}
+
+	@Column(name ="gsgm",nullable=true,length=50)
+	public String getGsgm() {
+		return gsgm;
+	}
+
+	public void setGsgm(String gsgm) {
+		this.gsgm = gsgm;
+	}
 }

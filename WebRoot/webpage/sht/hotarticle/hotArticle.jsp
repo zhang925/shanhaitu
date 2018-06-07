@@ -27,7 +27,7 @@
 		    </div>
 			<div class="form">
 		      <label class="Validform_label">排序:</label>
-		      <input class="inputxt" id="order" name="order" ignore="ignore"   value="${hotArticlePage.order}" />
+		      <input class="inputxt" id="orders" name="orders" ignore="ignore"   value="${hotArticlePage.orders}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 			<div class="form">

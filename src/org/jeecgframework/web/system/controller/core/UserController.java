@@ -640,6 +640,8 @@ public class UserController extends BaseController {
 			users.setCity(user.getCity());
 			users.setComDesc(user.getComDesc());
 			users.setLevel(user.getLevel());
+			users.setSex(user.getSex());
+			users.setLoginType(user.getLoginType());
 
             systemService.executeSql("delete from t_s_user_org where user_id=?", user.getId());
             saveUserOrgList(req, user);
