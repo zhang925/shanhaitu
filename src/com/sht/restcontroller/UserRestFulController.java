@@ -82,13 +82,14 @@ public class UserRestFulController {
         UserInfo userInfo = new UserInfo(u);//最终要返回给页面的 用户信息
         //ajaxMsg.setMsg(request.getSession().getId()); //这个session ID 客户端 要 放到浏览器 cookie 里面 并且 名字必须为 SESSIONID
 
-       /* JSONObject obj = new JSONObject();
+       JSONObject obj = new JSONObject();
         obj.put("SESSIONID", request.getSession().getId());
-        obj.put("result", userInfo);*/
+        obj.put("result", userInfo);
 
         ajaxMsg.setMsg("success");
 
-        ajaxMsg.setModel(userInfo);
+        ajaxMsg.setModel(obj);
+
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         return ajaxMsg;
     }

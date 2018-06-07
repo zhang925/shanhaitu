@@ -39,6 +39,28 @@ public class OrderRestController {
         return ajaxMsg;
     }
 
+
+    /**根据用户的ID获取用户的全部订单*/
+    @RequestMapping(value = "/user/list",method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxMsg userList(OrderEntity orderEntity, HttpServletResponse response, HttpServletRequest request){
+        AjaxMsg ajaxMsg = new AjaxMsg();
+        List<OrderEntity> list = new ArrayList<OrderEntity>();
+        //对用户ID校验
+        if(orderEntity==null || orderEntity.getUserid()==null || "".equals(orderEntity.getUserid()) ){
+            ajaxMsg.setMsg("用户的ID不能为空");
+            ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
+            return ajaxMsg;
+        }
+       String userid = orderEntity.getUserid();//用户ID
+        list = systemService.findHql(" from OrderEntity where userid = ? ",new Object[]{userid} );
+        ajaxMsg.setMsg("success");
+        ajaxMsg.setResponsecode(HttpStatus.OK.value());
+        ajaxMsg.setModel(list);
+        return ajaxMsg;
+    }
+
+
     @RequestMapping(value = "/info/{id}",method = RequestMethod.GET)
     @ResponseBody
     public AjaxMsg info(@PathVariable String id, HttpServletResponse response, HttpServletRequest request){
