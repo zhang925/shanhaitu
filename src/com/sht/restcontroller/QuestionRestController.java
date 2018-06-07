@@ -1,7 +1,9 @@
 package com.sht.restcontroller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sht.entity.question.QuestionEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
+import com.sht.restcontroller.util.UtilSht;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.web.system.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/question")
@@ -24,17 +27,32 @@ public class QuestionRestController {
     private SystemService systemService;
 
 
-    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    /***分页获取list*/
+    @RequestMapping(value = "/list")
     @ResponseBody
     public AjaxMsg list(QuestionEntity questionEntity, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
         List<QuestionEntity> list = new ArrayList<QuestionEntity>();
         list = systemService.getList(QuestionEntity.class);
-        //
+
+        Integer page = UtilSht.getPage(request);
+        Integer row = UtilSht.getRow(request);
+        Integer total = list.size();
+        Integer totalPage = (total%row==0) ? (total/row) : ((total/row)+1);
+        if(page >= totalPage){
+            page = totalPage;
+        }
+        List<Map<String, Object>> list2 = systemService.findForJdbc("select * from sht_question ",page,row);
+        JSONObject obj = new JSONObject();
+        obj.put("result", list2);
+        obj.put("total",total);
+        obj.put("totalPage",totalPage);
+        obj.put("page",page);
+        obj.put("row",row);
 
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(list);
+        ajaxMsg.setModel(obj);
         return ajaxMsg;
     }
 

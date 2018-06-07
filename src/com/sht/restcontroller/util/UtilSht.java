@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class UtilSht {
 
@@ -83,5 +84,35 @@ public class UtilSht {
         redomCode =  obj  + "" + code ;
         return redomCode;
     }
+
+
+    public static boolean isNum(String str){
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
+    /**参数值必须是page*/
+    public static Integer getPage(HttpServletRequest request){
+        String page = request.getParameter("page");
+        if(StringUtil.isEmpty(page)){
+            return 1;
+        }
+        if(!isNum( page)){
+            return 1;
+        }
+        return Integer.valueOf(page);
+    }
+    /**参数值必须是row*/
+    public static Integer getRow(HttpServletRequest request){
+        String row = request.getParameter("row");
+        if(StringUtil.isEmpty(row)){
+            return 10;
+        }
+        if(!isNum( row)){
+            return 10;
+        }
+        return Integer.valueOf(row);
+    }
+
 
 }
