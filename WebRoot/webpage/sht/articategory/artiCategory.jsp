@@ -13,10 +13,17 @@
 			<div class="form">
 		      <label class="Validform_label">分类名字:</label>
 		      <input class="inputxt" id="categoryName" name="categoryName" ignore="ignore"   value="${artiCategoryPage.categoryName}" />
-                <input class="inputxt" id="orders" name="orders" ignore="ignore"   value="${artiCategoryPage.orders}" />
+
 
                 <span class="Validform_checktip"></span>
 		    </div>
+
+            <div class="form">
+                <label class="Validform_label">排序:</label>
+                <input class="inputxt" id="orders" name="orders" ignore="ignore"   value="${artiCategoryPage.orders}" />
+                <span class="Validform_checktip"></span>
+            </div>
+
 	    </fieldset>
   </t:formvalid>
  </body>

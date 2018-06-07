@@ -6,6 +6,7 @@
   <t:datagrid name="orderList" title="订单表" actionUrl="orderController.do?datagrid" idField="id" fit="true">
    <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
    <t:dgCol title="用户ID" field="userid"   width="120"></t:dgCol>
+   <t:dgCol title="订单ID" field="orderid"   width="120"></t:dgCol>
    <t:dgCol title="用户名字" field="username"   width="120"></t:dgCol>
    <t:dgCol title="商品ID" field="goodsid"   width="120"></t:dgCol>
    <t:dgCol title="商品类型" field="ordertype"   width="120"></t:dgCol>

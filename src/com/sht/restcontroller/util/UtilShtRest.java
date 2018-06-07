@@ -175,6 +175,38 @@ public class UtilShtRest {
             }
 
 
+
+
+
+
+            if(StringUtil.isNotEmpty(user.getSex())){
+                users.setSex(user.getSex());
+            }
+
+            if(StringUtil.isNotEmpty(user.getLoginType())){
+                users.setLoginType(user.getLoginType());
+            }
+
+            if(StringUtil.isNotEmpty(user.getHwCity())){
+                users.setHwCity(user.getHwCity());
+            }
+
+            if(StringUtil.isNotEmpty(user.getLoginType())){
+                users.setLoginType(user.getLoginType());
+            }
+
+            if(StringUtil.isNotEmpty(user.getHangYe())){
+                users.setHangYe(user.getHangYe());
+            }
+
+            if(StringUtil.isNotEmpty(user.getYwhys())){
+                users.setYwhys(user.getYwhys());
+            }
+
+            if(StringUtil.isNotEmpty(user.getGsgm())){
+                users.setGsgm(user.getGsgm());
+            }
+
             //systemService.executeSql("delete from t_s_user_org where user_id=?", user.getId());
             //saveUserOrgList(req, user);
 //            users.setTSDepart(user.getTSDepart());

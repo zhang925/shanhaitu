@@ -31,6 +31,9 @@ import javax.persistence.SequenceGenerator;
 public class OrderEntity implements java.io.Serializable {
 	/**id*/
 	private java.lang.String id;
+	/**订单唯一ID 使用 UtilSht 中的工具生成*/
+	private  java.lang.String orderid;
+
 	/**用户ID*/
 	private java.lang.String userid;
 	/**用户名字*/
@@ -53,6 +56,8 @@ public class OrderEntity implements java.io.Serializable {
 	private java.util.Date payTime;
 	/**标记*/
 	private java.lang.Integer flag;
+
+
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -249,5 +254,14 @@ public class OrderEntity implements java.io.Serializable {
 	 */
 	public void setFlag(java.lang.Integer flag){
 		this.flag = flag;
+	}
+
+	@Column(name ="ORDERID",nullable=true,precision=10,scale=0)
+	public String getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(String orderid) {
+		this.orderid = orderid;
 	}
 }

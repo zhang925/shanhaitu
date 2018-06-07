@@ -2,6 +2,7 @@ package com.sht.restcontroller;
 
 import com.sht.entity.order.OrderEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
+import com.sht.restcontroller.util.UtilSht;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.web.system.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,19 @@ public class OrderRestController {
     public AjaxMsg save(OrderEntity orderEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
 
-
-
+        //订单ID动态生成
+        if(orderEntity==null || orderEntity.getUserid()==null || "".equals(orderEntity.getUserid()) ){
+            ajaxMsg.setMsg("用户的ID不能为空");
+            ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
+            return ajaxMsg;
+        }
+        String orderid = UtilSht.createOrderIDByUserID(orderEntity.getUserid());
+        if(StringUtil.isEmpty(orderid)){
+            ajaxMsg.setMsg("系统错误,保存失败。");
+            ajaxMsg.setResponsecode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return ajaxMsg;
+        }
+        orderEntity.setOrderid(orderid);//生成订单ID
         systemService.save(orderEntity);
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());

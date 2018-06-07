@@ -15,6 +15,14 @@
 		      <input class="inputxt" id="userid" name="userid" ignore="ignore"   value="${orderPage.userid}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
+
+			<div class="form">
+				<label class="Validform_label">订单ID:</label>
+				<input class="inputxt" id="orderid" name="orderid" ignore="ignore"   value="${orderPage.orderid}" />
+				<span class="Validform_checktip"></span>
+			</div>
+
+
 			<div class="form">
 		      <label class="Validform_label">用户名字:</label>
 		      <input class="inputxt" id="username" name="username" ignore="ignore"   value="${orderPage.username}" />

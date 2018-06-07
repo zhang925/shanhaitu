@@ -6,7 +6,7 @@
   <t:datagrid name="artiCategoryList" title="文章分类" actionUrl="artiCategoryController.do?datagrid" idField="id" fit="true">
    <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
    <t:dgCol title="分类名字" field="categoryName"   width="120"></t:dgCol>
-      <t:dgCol title="排序号" field="orders"   width="120"></t:dgCol>
+    <t:dgCol title="排序号" field="orders"   width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="删除" url="artiCategoryController.do?del&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"/>
    <t:dgToolBar title="录入" icon="icon-add" url="artiCategoryController.do?addorupdate" funname="add"></t:dgToolBar>
