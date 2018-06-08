@@ -31,6 +31,8 @@ import javax.persistence.SequenceGenerator;
 public class SelectedArticlesEntity implements java.io.Serializable {
 	/**id*/
 	private java.lang.String id;
+	/**文章新闻ID*/
+	private java.lang.String articleId;
 	/**发布时间*/
 	private java.util.Date publishTime;
 	/**下架时间*/
@@ -105,5 +107,14 @@ public class SelectedArticlesEntity implements java.io.Serializable {
 	 */
 	public void setOrders(java.lang.Integer orders){
 		this.orders = orders;
+	}
+
+	@Column(name ="ARTICLE_ID",nullable=true,length=11)
+	public String getArticleId() {
+		return articleId;
+	}
+
+	public void setArticleId(String articleId) {
+		this.articleId = articleId;
 	}
 }

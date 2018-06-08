@@ -11,6 +11,12 @@
 		<input id="id" name="id" type="hidden" value="${selectedArticlesPage.id }">
 		<fieldset class="step">
 			<div class="form">
+				<label class="Validform_label">文章ID:</label>
+				<input class="inputxt" id="articleId" name="articleId" ignore="ignore"   value="${selectedArticlesPage.articleId}" />
+				<span class="Validform_checktip"></span>
+			</div>
+
+			<div class="form">
 		      <label class="Validform_label">发布时间:</label>
 		      <input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  style="width: 150px" id="publishTime" name="publishTime" ignore="ignore"     value="<fmt:formatDate value='${selectedArticlesPage.publishTime}' type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" />
 		      <span class="Validform_checktip"></span>
