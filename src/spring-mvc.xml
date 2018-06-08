@@ -96,6 +96,9 @@
 	
 	<!-- 拦截器 -->
 	<mvc:interceptors>
+
+
+
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<bean class="org.jeecgframework.core.interceptors.EncodingInterceptor" />

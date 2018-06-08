@@ -3,7 +3,6 @@ package com.sht.restcontroller;
 import com.alibaba.fastjson.JSONObject;
 import com.sht.entity.question.QuestionEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
-import com.sht.restcontroller.util.RestAuthority;
 import com.sht.restcontroller.util.UtilSht;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.web.system.service.SystemService;
@@ -31,7 +30,6 @@ public class QuestionRestController {
     /***分页获取list*/
     @RequestMapping(value = "/list")
     @ResponseBody
-    @RestAuthority
     public AjaxMsg list(QuestionEntity questionEntity, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
         List<QuestionEntity> list = new ArrayList<QuestionEntity>();
@@ -43,6 +41,12 @@ public class QuestionRestController {
         Integer totalPage = (total%row==0) ? (total/row) : ((total/row)+1);
         if(page >= totalPage){
             page = totalPage;
+        }
+        if(page==0){
+            page =1;
+        }
+        if(totalPage == 0){
+            totalPage =1;
         }
         List<Map<String, Object>> list2 = systemService.findForJdbc("select * from sht_question ",page,row);
         JSONObject obj = new JSONObject();

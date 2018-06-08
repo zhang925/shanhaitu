@@ -10,7 +10,6 @@
             http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 	<aop:aspectj-autoproxy />
 	<context:component-scan base-package="org.jeecgframework.core.interceptors" />
-	<!-- 支持切面操作 -->
-	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
 
 </beans>
