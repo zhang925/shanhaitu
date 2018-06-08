@@ -53,7 +53,16 @@ public class ArticleNewsEntity implements java.io.Serializable {
 	private java.lang.String cateId;
 	/**状态*/
 	private java.lang.String status;
-	
+
+	/**图片路径*/
+	private java.lang.String imageUrl;
+
+	/**点赞数*/
+	private java.lang.Integer likeCount;
+
+	/**访问量*/
+	private java.lang.Integer visitCount;
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  id
@@ -249,5 +258,32 @@ public class ArticleNewsEntity implements java.io.Serializable {
 	 */
 	public void setStatus(java.lang.String status){
 		this.status = status;
+	}
+
+	@Column(name ="IMAGE_URL",nullable=true,length=1000)
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	@Column(name ="LIKE_COUNT",nullable=true,length=11)
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	@Column(name ="VISIT_COUNT",nullable=true,length=11)
+	public Integer getVisitCount() {
+		return visitCount;
+	}
+
+	public void setVisitCount(Integer visitCount) {
+		this.visitCount = visitCount;
 	}
 }

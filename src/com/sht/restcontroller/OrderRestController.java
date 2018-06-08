@@ -89,7 +89,7 @@ public class OrderRestController {
             ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
             return ajaxMsg;
         }
-        String orderid = UtilSht.createOrderIDByUserID(orderEntity.getUserid());
+        String orderid = UtilSht.createOrderID();
         if(StringUtil.isEmpty(orderid)){
             ajaxMsg.setMsg("系统错误,保存失败。");
             ajaxMsg.setResponsecode(HttpStatus.INTERNAL_SERVER_ERROR.value());

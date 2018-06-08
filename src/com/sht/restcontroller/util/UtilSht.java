@@ -73,15 +73,25 @@ public class UtilSht {
         if(userid==null || "".equals(userid)){//用户id为空
             return redomCode;
         }
-        // 26 位
+        // 26 位 带年月的格式  安全等级到 用户单次操作 1毫秒
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         Object obj = sdf.format(new Date());
        // Object obj = Math.abs(System.currentTimeMillis());
 
-        // 22 位的，安全等级到 用户单次操作 1毫秒
+        // 22 位的，时间毫秒数 安全等级到 用户单次操作 1毫秒
         int code = Integer.valueOf(Math.abs(userid.hashCode()));
 
         redomCode =  obj  + "" + code ;
+        return redomCode;
+    }
+
+    /**
+     *  当前时间毫秒级 为订单ID
+     *  订单ID和用户ID 联合验证，为用户 订单信息
+     * @return
+     */
+    public static  String createOrderID(){
+        String redomCode = Math.abs(System.currentTimeMillis()) +" ";
         return redomCode;
     }
 

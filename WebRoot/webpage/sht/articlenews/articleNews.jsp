@@ -65,6 +65,25 @@
 		      <input class="inputxt" id="status" name="status" ignore="ignore"   value="${articleNewsPage.status}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
+
+			<div class="form">
+				<label class="Validform_label">图片路径:</label>
+				<input class="inputxt" id="imageUrl" name="imageUrl" ignore="ignore"   value="${articleNewsPage.imageUrl}" />
+				<span class="Validform_checktip"></span>
+			</div>
+
+			<div class="form">
+				<label class="Validform_label">点赞数:</label>
+				<input class="inputxt" id="likeCount" name="status" ignore="likeCount"   value="${articleNewsPage.likeCount}" />
+				<span class="Validform_checktip"></span>
+			</div>
+
+			<div class="form">
+				<label class="Validform_label">访问量:</label>
+				<input class="inputxt" id="visitCount" name="visitCount" ignore="ignore"   value="${articleNewsPage.visitCount}" />
+				<span class="Validform_checktip"></span>
+			</div>
+
 	    </fieldset>
   </t:formvalid>
  </body>
