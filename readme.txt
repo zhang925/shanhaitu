@@ -4,7 +4,7 @@
     1.3、jeecg官方社区：http://www.jeecg.org/
 2、管理员：
     2.1、管理员账号：admin
-    2.2、密码：147258369
+    2.2、密码：*******
 3、配置文件介绍：
     3.1、src 下的 dbconfig.properties 是配置数据库的
     3.2、支持MySql、SQL Server、Oracle其他种类的数据库，需要修改基础代码，这里不做介绍
