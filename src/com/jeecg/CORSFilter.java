@@ -27,6 +27,16 @@ import java.util.UUID;
  */
 public class CORSFilter implements Filter {
 
+    private SystemService systemService;
+
+    public SystemService getSystemService() {
+        return systemService;
+    }
+    @Autowired
+    public void setSystemService(SystemService systemService) {
+        this.systemService = systemService;
+    }
+
     public void destroy() {
 
     }
@@ -67,6 +77,8 @@ public class CORSFilter implements Filter {
      * @return
      */
     public boolean isHandle(HttpServletRequest request){
+        System.out.println(systemService);
+
         String requestUrl = request.getRequestURI();//获取当前请求的url
        requestUrl = requestUrl.replace("/","");
         //系统免过滤的白名单，在单点登录的sso.properties的white.list配置

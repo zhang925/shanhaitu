@@ -71,6 +71,7 @@ public class UserInfo {
     }
     /**反向赋值的 构造器 */
     public UserInfo(TSUser tsUser){
+        if(tsUser!=null){
         SimpleDateFormat sdf1 =new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf2 =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.id = tsUser.getId();
@@ -103,6 +104,7 @@ public class UserInfo {
         this.hangYe = tsUser.getHangYe();
         this.ywhys = tsUser.getYwhys();
         this.gsgm = tsUser.getGsgm();
+        }
 
     }
 

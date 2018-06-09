@@ -85,10 +85,11 @@ public class SystemServiceImpl extends CommonServiceImpl implements SystemServic
 //		log.setTSUser(ResourceUtil.getSessionUser());
 		/*start chenqian 201708031TASK #2317 【改造】系统日志表，增加两个字段，避免关联查询 [操作人账号] [操作人名字]*/
 		TSUser u = ResourceUtil.getSessionUser();
-		log.setUserid(u.getId());
-		log.setUsername(u.getUserName());
-		log.setRealname(u.getRealName());
-
+		if(u!=null){
+			log.setUserid(u.getId());
+			log.setUsername(u.getUserName());
+			log.setRealname(u.getRealName());
+		}
 		commonDao.save(log);
 	}
 
