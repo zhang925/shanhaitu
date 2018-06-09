@@ -93,7 +93,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 		List<Map<String, Object>> list = systemService.findForJdbc(" select authority_uri from t_s_authority_white ");
 		boolean flag = false;
 		for(Map<String, Object> map : list){
-			if(requestUrl.equals(map.get("authority_uri"))){//查到是 免拦截的
+			if(requestUrl.contains(map.get("authority_uri").toString())){//查到是 免拦截的
 				flag = true;
 				break;
 			}

@@ -88,30 +88,34 @@ public class CORSFilter implements Filter {
         boolean flag = false;
 
         //解决 filter 中注入  systemService 失败
-        ServletContext sc = request.getSession().getServletContext();
+       ServletContext sc = request.getSession().getServletContext();
         XmlWebApplicationContext cxt = (XmlWebApplicationContext) WebApplicationContextUtils.getWebApplicationContext(sc);
-        if(cxt != null && cxt.getBean("systemService") != null && systemService == null)
-         systemService = (SystemService) cxt.getBean("systemService");
-
+        if(cxt != null && cxt.getBean("systemService") != null){
+            systemService = (SystemService) cxt.getBean("systemService");
+        }
         if(systemService!=null){
             //从数据库读取白名单
             List<Map<String, Object>> list = systemService.findForJdbc(" select authority_uri from t_s_authority_white ");
             if(list!=null && list.size()>0){
                 for(Map<String, Object> map : list){
-                    Object white =  map.get("authority_uri");
-                    white = white.toString().replace("/","");
-                    if(white.equals(requestUrl)){//和白名单匹配
-                        flag = true;
-                        break;
+                    Object  temp =  map.get("authority_uri");
+                    if(temp!=null){//linux 对 / 和 \ 很排斥啊，这里 去掉后变成小写比较
+                        String white = temp.toString().trim();
+                        white = white.toString().replace("/","");
+                        requestUrl = requestUrl.toLowerCase();
+                        white = white.toLowerCase();
+                        if(requestUrl.contains(white)){//和白名单匹配
+                            flag = true;
+                            break;
+                        }
                     }
                 }
             }
-
         }
 
 
         //系统免过滤的白名单，在单点登录的sso.properties的white.list配置
-       /* String whiteList = UtilSht.getPripertyPath("sso.properties",null,"white.list");
+      /* String whiteList = UtilSht.getPripertyPath("sso.properties",null,"white.list");
 
         if(whiteList!=null && !"".equals(whiteList)){
             whiteList = whiteList.trim();
@@ -125,7 +129,9 @@ public class CORSFilter implements Filter {
                 }
             }
 
-        }*/
+        }
+        */
+
         return flag;//不需要拦截
     }
 
