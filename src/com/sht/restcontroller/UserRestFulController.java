@@ -28,6 +28,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -59,20 +61,27 @@ public class UserRestFulController {
         tsUser.setPassword(password);
       if(StringUtils.isEmpty(username)){
           ajaxMsg.setMsg("用户名不能为空！");
+          ajaxMsg.setResponsecode(HttpStatus.FORBIDDEN.value());
           return ajaxMsg;
       }
         if(StringUtils.isEmpty(password)){
             ajaxMsg.setMsg( "密码不能为空！");
+            ajaxMsg.setResponsecode(HttpStatus.FORBIDDEN.value());
             return ajaxMsg;
         }
       TSUser u = userService.checkUserExits(tsUser);
       if(u==null){
           ajaxMsg.setMsg( "用户名或者密码错误！");
+          ajaxMsg.setResponsecode(HttpStatus.FORBIDDEN.value());
           return ajaxMsg;
       }
 
-
-
+      //首先 判断用户是否激活
+       if(u.getStatus()==0){//未激活用户
+           ajaxMsg.setMsg( "unverified");
+           ajaxMsg.setResponsecode(HttpStatus.FORBIDDEN.value());
+           return ajaxMsg;
+       }
 
 
         //登陆 系统
@@ -84,6 +93,7 @@ public class UserRestFulController {
 
        JSONObject obj = new JSONObject();
         obj.put("SESSIONID", request.getSession().getId());
+        request.getSession().setAttribute("restuser",u);//把该用户放到session中
         obj.put("result", userInfo);
 
         ajaxMsg.setMsg("success");
@@ -183,9 +193,19 @@ public class UserRestFulController {
         UserInfo userInfo = null;
         if(tsUser!=null){
             tsUser.setDevFlag("0");//普通用户，没有后台权限
-            String roleid = "8a8ab0b246dc81120146dc81818b0051";//普通用户 角色
-            String orgId = "402880f063be7e990163be85abfb0003";//默认到 山海图下 系统部门为 setDepartid 外部的 是duty 是具体名字职位 有点混淆
-             userInfo = UtilShtRest.saveOrUpdateUser( systemService, request,  tsUser, roleid, orgId,false);
+            //String roleid = "8a8ab0b246dc81120146dc81818b0051";//普通用户 角色
+            //String orgId = "402880f063be7e990163be85abfb0003";//默认到 山海图下 系统部门为 setDepartid 外部的 是duty 是具体名字职位 有点混淆
+            //从配置文件中读取
+            String roleid = UtilSht.getPripertyPath("sysConfig.properties",null,"rest.add.manager.roleid");
+            String orgId = UtilSht.getPripertyPath("sysConfig.properties",null,"rest.add.orgId");
+            if(StringUtil.isEmpty(roleid)){
+                roleid = "8a8ab0b246dc81120146dc81818b0051";
+            }
+            if(StringUtil.isEmpty(orgId)){
+                orgId = "402880f063be7e990163be85abfb0003";
+            }
+            tsUser.setCreateDate(new Date());//创建时间
+            userInfo = UtilShtRest.saveOrUpdateUser( systemService, request,  tsUser, roleid, orgId,false);
             if(userInfo==null){
                 msg = "注册失败，该用户名已经存在！";
             }
@@ -208,11 +228,32 @@ public class UserRestFulController {
             ajaxMsg.setMsg("用户名字，不能为空！");
             return ajaxMsg;
         }
-        UserInfo userInfo = UtilShtRest.saveOrUpdateUser( systemService, request,  tsUser, "", "",true);
+        String roleid = UtilSht.getPripertyPath("sysConfig.properties",null,"rest.add.manager.roleid");
+        String orgId = UtilSht.getPripertyPath("sysConfig.properties",null,"rest.add.orgId");
+        if(StringUtil.isEmpty(roleid)){
+            roleid = "8a8ab0b246dc81120146dc81818b0051";
+        }
+        if(StringUtil.isEmpty(orgId)){
+            orgId = "402880f063be7e990163be85abfb0003";
+        }
+        UserInfo userInfo = UtilShtRest.saveOrUpdateUser( systemService, request,  tsUser, roleid, orgId,true);
         if(userInfo==null || userInfo.getId()==null){
             msg = "该用户不存在!";
         }else{
             ajaxMsg.setModel(userInfo);
+        }
+        //修改成后，刷新 session
+        //这里需要刷新两个
+        String sessionid = UtilShtRest.getSessionIDFromHeader(request);
+        if(!StringUtil.isEmpty(sessionid)){
+            MySessionContext mySessionContext = MySessionContext.getSingleInstance();
+            HttpSession session =  mySessionContext.getSession(sessionid);
+            if(session!=null){
+                session.removeAttribute("restuser");//移除掉以前的
+                session.removeAttribute("LOCAL_CLINET_USER");
+                session.setAttribute("restuser",UtilShtRest.getUserInfoFromHeader(request));//更新现在的
+                session.setAttribute("LOCAL_CLINET_USER",UtilShtRest.getTSUserFromHeader(request));
+            }
         }
         ajaxMsg.setResponsecode( HttpStatus.OK.value());
         ajaxMsg.setMsg(msg);

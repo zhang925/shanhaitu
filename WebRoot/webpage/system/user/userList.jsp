@@ -8,11 +8,7 @@
 	<t:dgCol title="common.real.name" field="realName" query="false" width="100"></t:dgCol>
 	<%--<t:dgCol title="common.department" field="TSDepart_id" query="true" replace="${departsReplace}"></t:dgCol>--%>
 	<t:dgCol title="common.department" sortable="false" field="userOrgList.tsDepart.departname" query="false" width="100"></t:dgCol>
-	<t:dgCol title="common.role" field="userKey" width="100"></t:dgCol>
-
-	<t:dgCol title="common.role" field="userKey" width="100"></t:dgCol>
-
-
+<%--	<t:dgCol title="common.role" field="userKey" width="100"></t:dgCol>--%>
 
 	<t:dgCol title="common.createby" field="createBy" hidden="true" width="100"></t:dgCol>
 	<t:dgCol title="common.createtime" field="createDate" formatter="yyyy-MM-dd" hidden="false"></t:dgCol>

@@ -77,6 +77,92 @@ public class UtilShtRest {
         return  userInfo;
     }
 
+    //从请求 头中获取sessionid
+    public static String getSessionIDFromHeader( HttpServletRequest request){
+        //"SESSIONID=947CDE0762299E1241430790C588A7F3; aaa=aaa"
+        String authorization = request.getHeader("Authorization");//token
+        String SESSIONID  = "";
+        if (authorization != null && !"".equals(authorization)) { // cookie 里面是不允许 ; 存在的，所以这里可以放心截取
+            String cookies[] = authorization.split(";");
+            for (String cookie : cookies){
+                String cooki[] = cookie.split("=");
+                if(cooki!=null && cooki.length>1){//说明是正常的cookie
+                    if(cooki[0].trim().equals("SESSIONID")){
+                        SESSIONID = cooki[1];
+                    }
+                }
+            }
+        }
+        return  SESSIONID;
+    }
+
+
+    /**
+     * 从ajax 中的头部 获取 LOCAL_CLINET_USER TSUser
+     * @param request
+     * @return
+     */
+    public static TSUser getTSUserFromHeader( HttpServletRequest request){
+        Object object = getUserFromHeader(  request, "LOCAL_CLINET_USER");
+        TSUser tsUser = null;
+        if(object!=null){
+            tsUser = (TSUser)object;
+        }
+        return tsUser;
+    }
+
+    /**
+     *  从ajax 中的头部 获取 restuser UserInfo
+     * @param request
+     * @return
+     */
+    public static UserInfo getUserInfoFromHeader( HttpServletRequest request){
+        Object object = getUserFromHeader(  request, "restuser");
+        UserInfo userInfo = null;
+        if(object!=null){
+            userInfo = (UserInfo)object;
+        }
+        return userInfo;
+    }
+
+    /**
+     *  从请求 头中的sessionid中获取，LOCAL_CLINET_USER,restuser 的TSUser
+     * @param request
+     * @param SessionUser LOCAL_CLINET_USER-->TSUser  restuser-->UserInfo
+     * @return
+     */
+    public static Object getUserFromHeader( HttpServletRequest request,String SessionUser){
+        //"SESSIONID=947CDE0762299E1241430790C588A7F3; aaa=aaa"
+        String authorization = request.getHeader("Authorization");//token
+        String SESSIONID  = "";
+        if (authorization != null && !"".equals(authorization)) { // cookie 里面是不允许 ; 存在的，所以这里可以放心截取
+            String cookies[] = authorization.split(";");
+            for (String cookie : cookies){
+                String cooki[] = cookie.split("=");
+                if(cooki!=null && cooki.length>1){//说明是正常的cookie
+                    if(cooki[0].trim().equals("SESSIONID")){
+                        SESSIONID = cooki[1];
+                    }
+                }
+            }
+        }
+        if("".equals(SESSIONID)){
+            return null;
+        }
+        MySessionContext mySessionContext = MySessionContext.getSingleInstance();
+        HttpSession session = mySessionContext.getSession(SESSIONID);
+        if(session!=null ){//说明sesssion没有注销
+          Object obj = session.getAttribute(SessionUser);
+            //Object obj = session.getAttribute("restuser");//这个是webservice用户
+           //Object obj2 = session.getAttribute("LOCAL_CLINET_USER");//这个是系统用户，两者是同一个用户
+            if(obj==null){
+                return null;
+            }
+            return obj;//从以前的登陆信息中获取登陆后的用户
+        }
+        return  null;
+    }
+
 
     /**
      *

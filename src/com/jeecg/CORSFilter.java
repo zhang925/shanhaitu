@@ -6,6 +6,7 @@ import com.baomidou.kisso.SSOHelper;
 import com.baomidou.kisso.SSOToken;
 import com.sht.restcontroller.util.MySessionContext;
 import com.sht.restcontroller.util.UtilSht;
+import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.jeecgframework.web.system.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -25,8 +26,7 @@ import java.util.UUID;
  * 本拦截器只对webservice 有效 即 wwww.aaa.com/api/**的访问拦截
  */
 public class CORSFilter implements Filter {
-    @Autowired
-    private  SystemService systemService;
+
     public void destroy() {
 
     }
@@ -47,7 +47,7 @@ public class CORSFilter implements Filter {
             response.setCharacterEncoding("utf8");
            JSONObject obj = new JSONObject();
            obj.put("responsecode","403");
-           obj.put("msg", "没有权限，或者登录过时，请检查账户信息。");
+           obj.put("msg", "no_login");
             response.getWriter().println(obj.toJSONString());
         }
 
@@ -68,14 +68,22 @@ public class CORSFilter implements Filter {
      */
     public boolean isHandle(HttpServletRequest request){
         String requestUrl = request.getRequestURI();//获取当前请求的url
-        //requestUrl = requestUrl.replace("/","");
+       requestUrl = requestUrl.replace("/","");
         //系统免过滤的白名单，在单点登录的sso.properties的white.list配置
         String whiteList = UtilSht.getPripertyPath("sso.properties",null,"white.list");
         boolean flag = false;
         if(whiteList!=null && !"".equals(whiteList)){
-           if( whiteList.indexOf(requestUrl)!=-1){//找到该地址
-               flag = true;
-           }
+            whiteList = whiteList.trim();
+            String str [] = whiteList.split(";");
+            if(str!=null && str.length>0){
+                for(String temp:str){
+                    if( requestUrl.indexOf(temp)!=-1){//找到该地址
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
         }
         return flag;//不需要拦截
     }
@@ -107,7 +115,17 @@ public class CORSFilter implements Filter {
         MySessionContext mySessionContext = MySessionContext.getSingleInstance();
         HttpSession session = mySessionContext.getSession(SESSIONID);
         if(session!=null){//说明sesssion没有注销
-            return true;
+            Object obj = session.getAttribute("restuser");//这个是webservice用户
+            Object obj2 = session.getAttribute("LOCAL_CLINET_USER");//这个是系统用户，两者是同一个用户
+            if(obj==null){
+                return false;
+            }
+            TSUser tsUser = (TSUser)obj;
+            if(tsUser==null || tsUser.getId()==null){
+                return false;
+            }else{
+                return true;//从以前的登陆信息中获取登陆后的用户
+            }
         }
         return false;
     }
