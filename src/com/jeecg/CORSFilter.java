@@ -9,9 +9,12 @@ import com.sht.restcontroller.util.UtilSht;
 import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.jeecgframework.web.system.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import javax.servlet.*;
 import javax.servlet.*;
@@ -25,14 +28,16 @@ import java.util.UUID;
 /**
  * 本拦截器只对webservice 有效 即 wwww.aaa.com/api/**的访问拦截
  */
+@Controller
 public class CORSFilter implements Filter {
 
-    private SystemService systemService;
 
+    private SystemService systemService;
+    @Autowired
     public SystemService getSystemService() {
         return systemService;
     }
-    @Autowired
+
     public void setSystemService(SystemService systemService) {
         this.systemService = systemService;
     }
@@ -77,13 +82,37 @@ public class CORSFilter implements Filter {
      * @return
      */
     public boolean isHandle(HttpServletRequest request){
-        System.out.println(systemService);
 
         String requestUrl = request.getRequestURI();//获取当前请求的url
-       requestUrl = requestUrl.replace("/","");
-        //系统免过滤的白名单，在单点登录的sso.properties的white.list配置
-        String whiteList = UtilSht.getPripertyPath("sso.properties",null,"white.list");
+        requestUrl = requestUrl.replace("/","");
         boolean flag = false;
+
+        //解决 filter 中注入  systemService 失败
+        ServletContext sc = request.getSession().getServletContext();
+        XmlWebApplicationContext cxt = (XmlWebApplicationContext) WebApplicationContextUtils.getWebApplicationContext(sc);
+        if(cxt != null && cxt.getBean("systemService") != null && systemService == null)
+         systemService = (SystemService) cxt.getBean("systemService");
+
+        if(systemService!=null){
+            //从数据库读取白名单
+            List<Map<String, Object>> list = systemService.findForJdbc(" select authority_uri from t_s_authority_white ");
+            if(list!=null && list.size()>0){
+                for(Map<String, Object> map : list){
+                    Object white =  map.get("authority_uri");
+                    white = white.toString().replace("/","");
+                    if(white.equals(requestUrl)){//和白名单匹配
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+        }
+
+
+        //系统免过滤的白名单，在单点登录的sso.properties的white.list配置
+       /* String whiteList = UtilSht.getPripertyPath("sso.properties",null,"white.list");
+
         if(whiteList!=null && !"".equals(whiteList)){
             whiteList = whiteList.trim();
             String str [] = whiteList.split(";");
@@ -96,7 +125,7 @@ public class CORSFilter implements Filter {
                 }
             }
 
-        }
+        }*/
         return flag;//不需要拦截
     }
 
