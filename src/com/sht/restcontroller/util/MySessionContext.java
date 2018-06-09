@@ -3,6 +3,9 @@ package com.sht.restcontroller.util;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
+/**
+ * 此类为记录session的类。
+ */
 public class MySessionContext {
     private static HashMap mymap = new HashMap();
     private static MySessionContext singObj = null;

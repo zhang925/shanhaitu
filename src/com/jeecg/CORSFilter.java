@@ -27,6 +27,11 @@ import java.util.UUID;
 
 /**
  * 本拦截器只对webservice 有效 即 wwww.aaa.com/api/**的访问拦截
+ * 本来打算做个需要拦截就加注解的方式
+ * 但是发现几乎所有的请求都需要拦截，
+ * 因此这里采用系统白名单的方式，进行免拦截
+ * @Time 2018年6月
+ * @Author zzy
  */
 @Controller
 public class CORSFilter implements Filter {
@@ -62,11 +67,9 @@ public class CORSFilter implements Filter {
             response.setCharacterEncoding("utf8");
            JSONObject obj = new JSONObject();
            obj.put("responsecode","403");
-           obj.put("msg", "no_login");
+           obj.put("msg", "no_login");//应前后端要求，这里统一采用 msg no_login 为没有登录，或者服务器session消失。
             response.getWriter().println(obj.toJSONString());
         }
-
-
 
 
     }
@@ -82,7 +85,6 @@ public class CORSFilter implements Filter {
      * @return
      */
     public boolean isHandle(HttpServletRequest request){
-
         String requestUrl = request.getRequestURI();//获取当前请求的url
         requestUrl = requestUrl.replace("/","");
         boolean flag = false;
@@ -112,8 +114,6 @@ public class CORSFilter implements Filter {
                 }
             }
         }
-
-
         //系统免过滤的白名单，在单点登录的sso.properties的white.list配置
       /* String whiteList = UtilSht.getPripertyPath("sso.properties",null,"white.list");
 
@@ -131,7 +131,6 @@ public class CORSFilter implements Filter {
 
         }
         */
-
         return flag;//不需要拦截
     }
 
