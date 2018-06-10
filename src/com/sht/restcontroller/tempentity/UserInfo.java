@@ -82,6 +82,7 @@ public class UserInfo {
         if(tsUser.getBirth()!=null){
             this.birth = sdf1.format(tsUser.getBirth()) ;
         }
+        this.dept = tsUser.getDept();
         this.duty = tsUser.getDuty();
         this.mobilePhone = tsUser.getMobilePhone();
         this.officePhone = tsUser.getOfficePhone();

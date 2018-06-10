@@ -164,7 +164,7 @@ public class UserRestFulController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/info",method = RequestMethod.POST)
+    @RequestMapping(value = "/info/online",method = RequestMethod.POST)
     @ResponseBody
     public AjaxMsg userSessionInfo(HttpServletRequest request){
             AjaxMsg ajaxMsg = new AjaxMsg();
