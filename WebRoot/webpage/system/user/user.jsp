@@ -66,7 +66,7 @@
 		});
     </script>
 </head>
-<body style="overflow-y: hidden" scroll="no">
+<body >
 <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="table" 
 action="userController.do?saveUser"> <!--很鸡肋的一个设置导致不能提交表单  beforeSubmit="setOrgIds" -->
 	<input id="id" name="id" type="hidden" value="${user.id }">

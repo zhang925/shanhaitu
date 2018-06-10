@@ -6,7 +6,7 @@
   <title>问题</title>
   <t:base type="jquery,easyui,tools,DatePicker"></t:base>
  </head>
- <body style="overflow-y: hidden" scroll="no">
+ <body  >
   <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="table" action="questionController.do?save">
 			<input id="id" name="id" type="hidden" value="${questionPage.id }">
 			<table style="width: 600px;" cellpadding="0" cellspacing="1" class="formtable">

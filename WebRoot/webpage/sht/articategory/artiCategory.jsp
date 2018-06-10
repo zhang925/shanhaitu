@@ -6,7 +6,7 @@
   <title>文章分类</title>
   <t:base type="jquery,easyui,tools,DatePicker"></t:base>
  </head>
- <body style="overflow-y: hidden" scroll="no">
+ <body >
   <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="div" action="artiCategoryController.do?save">
 		<input id="id" name="id" type="hidden" value="${artiCategoryPage.id }">
 		<fieldset class="step">

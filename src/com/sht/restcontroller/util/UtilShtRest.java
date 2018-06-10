@@ -310,7 +310,9 @@ public class UtilShtRest {
             }
 
             systemService.updateEntitie(users);
-            List<TSRoleUser> ru = systemService.findByProperty(TSRoleUser.class, "TSUser.id", user.getId());
+
+            //rest下 用户没有修改 角色 的权利，以后 要有的话，自己放开，并且加以测试。貌似下面这个查询有问题。
+            List<TSRoleUser> ru = systemService.findByProperty(TSRoleUser.class, "TSUser.id", users.getId());
             systemService.deleteAllEntitie(ru);
             if (StringUtil.isNotEmpty(roleid)) {
                 saveRoleUser(systemService,users, roleid);

@@ -6,7 +6,7 @@
   <title>文章新闻</title>
   <t:base type="jquery,easyui,tools,DatePicker"></t:base>
  </head>
- <body style="overflow-y: hidden" scroll="no">
+ <body >
   <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="div" action="articleNewsController.do?save">
 		<input id="id" name="id" type="hidden" value="${articleNewsPage.id }">
 		<fieldset class="step">

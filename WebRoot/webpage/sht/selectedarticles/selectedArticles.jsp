@@ -6,7 +6,7 @@
   <title>精选文章</title>
   <t:base type="jquery,easyui,tools,DatePicker"></t:base>
  </head>
- <body style="overflow-y: hidden" scroll="no">
+ <body >
   <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="div" action="selectedArticlesController.do?save">
 		<input id="id" name="id" type="hidden" value="${selectedArticlesPage.id }">
 		<fieldset class="step">
