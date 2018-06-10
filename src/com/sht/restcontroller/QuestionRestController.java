@@ -32,12 +32,40 @@ public class QuestionRestController {
     @ResponseBody
     public AjaxMsg list(QuestionEntity questionEntity, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        List<QuestionEntity> list = new ArrayList<QuestionEntity>();
-        list = systemService.getList(QuestionEntity.class);
+
+        String sql = "select * from sht_question where 1=1 ";//这里不采用jeecg的方法了，方便以后其他人维护。
+        String countSql = "select count(0) from sht_question  where 1=1  ";
+        String where = "";
+        //拼接条件
+        //要根据ID查询
+        String tagid = request.getParameter("tagid");//分类tagid
+        if(!StringUtil.isEmpty(tagid)){//非空
+           //说明 要根据 标签ID 查询
+            List list01 = systemService.findListbySql(" SELECT question_id as questionId FROM sht_question_relation_tag WHERE  1=1 and tag_id = '"+tagid+"' ");
+            String id = "";
+            if(list01!=null && list01.size()>0){
+               for(Object obj : list01){
+                   id = id + "," + "'"+obj+"'";
+               }
+            }
+            id = "('0'" + id + ") ";
+            where = where + " and id in " + id ;
+        }
+
+        String title = questionEntity.getTitle();//分类ID
+        if(!StringUtil.isEmpty(title)){//非空
+            where = where + " and title like '%"+title+"%' ";
+        }
+        sql = sql + where;
+        countSql = countSql + where;
+        long num  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数
+
+
+
 
         Integer page = UtilSht.getPage(request);
         Integer row = UtilSht.getRow(request);
-        Integer total = list.size();
+        int total = (int)num;
         Integer totalPage = (total%row==0) ? (total/row) : ((total/row)+1);
         if(page >= totalPage){
             page = totalPage;
@@ -48,7 +76,7 @@ public class QuestionRestController {
         if(totalPage == 0){
             totalPage =1;
         }
-        List<Map<String, Object>> list2 = systemService.findForJdbc("select * from sht_question ",page,row);
+        List<Map<String, Object>> list2 = systemService.findForJdbc(sql,page,row);
         JSONObject obj = new JSONObject();
         obj.put("result", list2);
         obj.put("total",total);

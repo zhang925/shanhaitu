@@ -4,7 +4,7 @@
 <div class="easyui-layout" fit="true">
   <div region="center" style="padding:0px;border:0px">
   <t:datagrid name="questionTagList" title="问题标签表" actionUrl="questionTagController.do?datagrid" idField="id" fit="true">
-   <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
+   <t:dgCol title="编号" field="id" hidden="false"></t:dgCol>
    <t:dgCol title="标签名字" field="tagName"   width="120"></t:dgCol>
    <t:dgCol title="问题分类ID" field="questionCategoryId"   width="120"></t:dgCol>
    <t:dgCol title="访问次数" field="visitCount"   width="120"></t:dgCol>

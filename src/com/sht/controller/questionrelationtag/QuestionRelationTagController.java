@@ -45,9 +45,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**   
  * @Title: Controller
- * @Description: 问题标签关联表
+ * @Description: 问题分类和问题关系表
  * @author zhangdaihao
- * @date 2018-05-29 21:59:23
+ * @date 2018-06-10 20:22:00
  * @version V1.0   
  *
  */
@@ -69,7 +69,7 @@ public class QuestionRelationTagController extends BaseController {
 
 
 	/**
-	 * 问题标签关联表列表 页面跳转
+	 * 问题分类和问题关系表列表 页面跳转
 	 * 
 	 * @return
 	 */
@@ -97,7 +97,7 @@ public class QuestionRelationTagController extends BaseController {
 	}
 
 	/**
-	 * 删除问题标签关联表
+	 * 删除问题分类和问题关系表
 	 * 
 	 * @return
 	 */
@@ -107,7 +107,7 @@ public class QuestionRelationTagController extends BaseController {
 		String message = null;
 		AjaxJson j = new AjaxJson();
 		questionRelationTag = systemService.getEntity(QuestionRelationTagEntity.class, questionRelationTag.getId());
-		message = "问题标签关联表删除成功";
+		message = "问题分类和问题关系表删除成功";
 		questionRelationTagService.delete(questionRelationTag);
 		systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 		
@@ -117,7 +117,7 @@ public class QuestionRelationTagController extends BaseController {
 
 
 	/**
-	 * 添加问题标签关联表
+	 * 添加问题分类和问题关系表
 	 * 
 	 * @param ids
 	 * @return
@@ -128,7 +128,7 @@ public class QuestionRelationTagController extends BaseController {
 		String message = null;
 		AjaxJson j = new AjaxJson();
 		if (StringUtil.isNotEmpty(questionRelationTag.getId())) {
-			message = "问题标签关联表更新成功";
+			message = "问题分类和问题关系表更新成功";
 			QuestionRelationTagEntity t = questionRelationTagService.get(QuestionRelationTagEntity.class, questionRelationTag.getId());
 			try {
 				MyBeanUtils.copyBeanNotNull2Bean(questionRelationTag, t);
@@ -136,10 +136,10 @@ public class QuestionRelationTagController extends BaseController {
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
-				message = "问题标签关联表更新失败";
+				message = "问题分类和问题关系表更新失败";
 			}
 		} else {
-			message = "问题标签关联表添加成功";
+			message = "问题分类和问题关系表添加成功";
 			questionRelationTagService.save(questionRelationTag);
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}
@@ -148,7 +148,7 @@ public class QuestionRelationTagController extends BaseController {
 	}
 
 	/**
-	 * 问题标签关联表列表页面跳转
+	 * 问题分类和问题关系表列表页面跳转
 	 * 
 	 * @return
 	 */

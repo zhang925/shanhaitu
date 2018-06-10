@@ -4,7 +4,7 @@
 <div class="easyui-layout" fit="true">
   <div region="center" style="padding:0px;border:0px">
   <t:datagrid name="questionRelationTagList" title="问题标签关联表" actionUrl="questionRelationTagController.do?datagrid" idField="id" fit="true">
-   <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
+   <t:dgCol title="编号" field="id" hidden="false"></t:dgCol>
    <t:dgCol title="标签id" field="tagId"   width="120"></t:dgCol>
    <t:dgCol title="问题id" field="questionId"   width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>

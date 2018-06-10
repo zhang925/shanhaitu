@@ -4,7 +4,7 @@
 <div class="easyui-layout" fit="true">
   <div region="center" style="padding:0px;border:0px">
   <t:datagrid name="selectedArticlesList" title="精选文章" actionUrl="selectedArticlesController.do?datagrid" idField="id" fit="true">
-   <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
+   <t:dgCol title="编号" field="id" hidden="false"></t:dgCol>
    <t:dgCol title="发布时间" field="publishTime" formatter="yyyy-MM-dd hh:mm:ss"  width="120"></t:dgCol>
    <t:dgCol title="下架时间" field="closingTime" formatter="yyyy-MM-dd hh:mm:ss"  width="120"></t:dgCol>
    <t:dgCol title="排序" field="orders"   width="120"></t:dgCol>

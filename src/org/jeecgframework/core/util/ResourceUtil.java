@@ -123,7 +123,9 @@ public class ResourceUtil {
 			requestPath = requestPath.substring(0,requestPath.indexOf(".do")+3);
 		}
 
-		requestPath = requestPath.substring(request.getContextPath().length() + 1);// 去掉项目路径
+		if(requestPath.length()  > request.getContextPath().length() +1){
+			requestPath = requestPath.substring(request.getContextPath().length() + 1);// 去掉项目路径
+		}
 		return requestPath;
 	}
 

@@ -4,7 +4,7 @@
 <div class="easyui-layout" fit="true">
   <div region="center" style="padding:0px;border:0px">
   <t:datagrid name="articleNewsList" title="文章新闻" actionUrl="articleNewsController.do?datagrid" idField="id" fit="true">
-   <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
+   <t:dgCol title="编号" field="id" hidden="false"></t:dgCol>
    <t:dgCol title="标题" field="title"   width="120"></t:dgCol>
    <t:dgCol title="概要" field="summary"   width="120"></t:dgCol>
    <t:dgCol title="内容" field="content"   width="120"></t:dgCol>

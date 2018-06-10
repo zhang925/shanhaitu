@@ -4,7 +4,7 @@
 <div class="easyui-layout" fit="true">
   <div region="center" style="padding:0px;border:0px">
   <t:datagrid name="artiCategoryList" title="文章分类" actionUrl="artiCategoryController.do?datagrid" idField="id" fit="true">
-   <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
+   <t:dgCol title="编号" field="id" hidden="false"></t:dgCol>
    <t:dgCol title="分类名字" field="categoryName"   width="120"></t:dgCol>
     <t:dgCol title="排序号" field="orders"   width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>

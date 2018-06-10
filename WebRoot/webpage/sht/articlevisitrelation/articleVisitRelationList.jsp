@@ -4,7 +4,7 @@
 <div class="easyui-layout" fit="true">
   <div region="center" style="padding:0px;border:0px">
   <t:datagrid name="articleVisitRelationList" title="文章访问渠道" actionUrl="articleVisitRelationController.do?datagrid" idField="id" fit="true">
-   <t:dgCol title="编号" field="id" hidden="true"></t:dgCol>
+   <t:dgCol title="编号" field="id" hidden="false"></t:dgCol>
    <t:dgCol title="文章ID" field="articleId"   width="120"></t:dgCol>
    <t:dgCol title="访问渠道" field="visitChannel"   width="120"></t:dgCol>
    <t:dgCol title="访问时间" field="visitTime" formatter="yyyy-MM-dd hh:mm:ss"  width="120"></t:dgCol>

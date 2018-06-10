@@ -1,10 +1,12 @@
 package com.sht.restcontroller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sht.entity.articlenews.ArticleNewsEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
 import com.sht.restcontroller.tempentity.UserInfo;
 import com.sht.restcontroller.util.MySessionContext;
 import com.sht.restcontroller.util.UtilEmail;
+import com.sht.restcontroller.util.UtilSht;
 import com.sht.restcontroller.util.UtilShtRest;
 import com.sht.service.articlenews.ArticleNewsServiceI;
 import org.apache.commons.lang.StringUtils;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/article")
@@ -40,16 +43,51 @@ public class ArticleNewsRestController {
     @Autowired
     private ArticleNewsServiceI articleNewsService;
 
-    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    @RequestMapping(value = "/list")
     @ResponseBody
     public AjaxMsg list(ArticleNewsEntity articleNewsEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        List<ArticleNewsEntity> list = new ArrayList<ArticleNewsEntity>();
-        list = articleNewsService.getList(ArticleNewsEntity.class);
-        //
+        String sql = "select * from sht_article_news where 1=1 ";//这里不采用jeecg的方法了，方便以后其他人维护。
+        String countSql = "select count(0) from sht_article_news  where 1=1  ";
+        String where = "";
+        //拼接条件
+        //要根据ID查询
+        String fenleiid = articleNewsEntity.getCateId();//分类ID
+        if(!StringUtil.isEmpty(fenleiid)){//非空
+            where = " and cate_id ='"+fenleiid+"' ";
+        }
+
+        String title = articleNewsEntity.getTitle();//标题模糊查询
+        if(!StringUtil.isEmpty(title)){//非空
+            where = where + " and title like '%"+title+"%' ";
+        }
+        sql = sql + where;
+        countSql = countSql + where;
+        long num  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数
+        Integer page = UtilSht.getPage(request);
+        Integer row = UtilSht.getRow(request);
+        int total = (int)num;//总条数
+        Integer totalPage = (total%row==0) ? (total/row) : ((total/row)+1);
+        if(page >= totalPage){
+            page = totalPage;
+        }
+        if(page==0){
+            page =1;
+        }
+        if(totalPage == 0){
+            totalPage =1;
+        }
+        List<Map<String, Object>> list2 = systemService.findForJdbc(sql,page,row);
+        JSONObject obj = new JSONObject();
+        obj.put("result", list2);
+        obj.put("total",total);
+        obj.put("totalPage",totalPage);
+        obj.put("page",page);
+        obj.put("row",row);
+
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(list);
+        ajaxMsg.setModel(obj);
         return ajaxMsg;
     }
 

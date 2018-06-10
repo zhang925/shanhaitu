@@ -17,9 +17,9 @@ import javax.persistence.SequenceGenerator;
 
 /**   
  * @Title: Entity
- * @Description: 问题标签关联表
+ * @Description: 问题分类和问题关系表
  * @author zhangdaihao
- * @date 2018-05-29 21:59:23
+ * @date 2018-06-10 20:22:00
  * @version V1.0   
  *
  */
@@ -29,23 +29,33 @@ import javax.persistence.SequenceGenerator;
 @DynamicInsert(true)
 @SuppressWarnings("serial")
 public class QuestionRelationTagEntity implements java.io.Serializable {
+	/**id*/
 	private java.lang.String id;
 	/**标签id*/
 	private java.lang.String tagId;
 	/**问题id*/
 	private java.lang.String questionId;
+	
+	/**
+	 *方法: 取得java.lang.String
+	 *@return: java.lang.String  id
+	 */
+	
 	@Id
 	@GeneratedValue(generator = "paymentableGenerator")
 	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
 	@Column(name ="ID",nullable=false,length=32)
-	public String getId() {
-		return id;
+	public java.lang.String getId(){
+		return this.id;
 	}
 
-	public void setId(String id) {
+	/**
+	 *方法: 设置java.lang.String
+	 *@param: java.lang.String  id
+	 */
+	public void setId(java.lang.String id){
 		this.id = id;
 	}
-
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  标签id
