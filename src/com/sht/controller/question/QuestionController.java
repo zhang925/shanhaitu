@@ -4,6 +4,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sht.entity.questionrelationtag.QuestionRelationTagEntity;
+import com.sht.entity.questiontag.QuestionTagEntity;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -84,7 +86,7 @@ public class QuestionController extends BaseController {
 	 * @param request
 	 * @param response
 	 * @param dataGrid
-	 * @param user
+	 * @param
 	 */
 
 	@RequestMapping(params = "datagrid")
@@ -119,7 +121,7 @@ public class QuestionController extends BaseController {
 	/**
 	 * 添加问题
 	 * 
-	 * @param ids
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(params = "save")
@@ -133,6 +135,30 @@ public class QuestionController extends BaseController {
 			try {
 				MyBeanUtils.copyBeanNotNull2Bean(question, t);
 				questionService.saveOrUpdate(t);
+
+				//删除以前的关系
+				List<QuestionRelationTagEntity> list = systemService.findHql(" from QuestionRelationTagEntity where questionId=?",new Object[]{t.getId()});
+				if(list!=null && list.size()>0){
+					for(QuestionRelationTagEntity q : list){
+						//删除掉以前的关系
+						systemService.deleteEntityById(QuestionRelationTagEntity.class,q.getId());
+					}
+				}
+				String temp  = t.getTagid();//获取 临时字段，即 问题和 问题标签的 关系
+				if(!StringUtil.isEmpty(temp)){
+					String tagids[]  = temp.split(",");
+					if(tagids!=null && tagids.length>0){
+						for(String tagid : tagids){
+							QuestionRelationTagEntity questionRelationTagEntity = new QuestionRelationTagEntity();//关系表
+							questionRelationTagEntity.setQuestionId(question.getId());
+							questionRelationTagEntity.setTagId(tagid);
+							systemService.save(questionRelationTagEntity);
+						}
+					}
+				}
+
+
+
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -140,7 +166,21 @@ public class QuestionController extends BaseController {
 			}
 		} else {
 			message = "问题添加成功";
-			questionService.save(question);
+			String temp  = question.getTagid();//获取 临时字段，即 问题和 问题标签的 关系
+			questionService.save(question);//先保存问题，这样就能获取到问题的ID
+
+			if(!StringUtil.isEmpty(temp)){
+				String tagids[]  = temp.split(",");
+				if(tagids!=null && tagids.length>0){
+					for(String tagid : tagids){
+						QuestionRelationTagEntity questionRelationTagEntity = new QuestionRelationTagEntity();//关系表
+						questionRelationTagEntity.setQuestionId(question.getId());
+						questionRelationTagEntity.setTagId(tagid);
+						systemService.save(questionRelationTagEntity);
+					}
+				}
+			}
+
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}
 		j.setMsg(message);
@@ -156,6 +196,25 @@ public class QuestionController extends BaseController {
 	public ModelAndView addorupdate(QuestionEntity question, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(question.getId())) {
 			question = questionService.getEntity(QuestionEntity.class, question.getId());
+
+			//获取问题和标签的关系
+			List<QuestionRelationTagEntity> list = systemService.findHql(" from QuestionRelationTagEntity where questionId=?",new Object[]{question.getId()});
+			if(list!=null && list.size()>0){
+				String tagName = "";//要显示的问题标签
+				String temp = "";//要显示的问题标签的ID
+				for(QuestionRelationTagEntity q : list){
+					temp = q.getTagId() + "," + temp;
+					if(!StringUtil.isEmpty(q.getTagId())){
+						QuestionTagEntity questionTagEntity = systemService.getEntity(QuestionTagEntity.class,q.getTagId());
+						tagName = questionTagEntity.getTagName() + "," + tagName;
+					}
+				}
+				temp = temp.substring(0,temp.lastIndexOf(","));
+				tagName = tagName.substring(0,tagName.lastIndexOf(","));
+				question.setTagid(temp);
+				question.setTagName(tagName);
+			}
+
 			req.setAttribute("questionPage", question);
 		}
 		return new ModelAndView("sht/question/question");

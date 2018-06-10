@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.jeecgframework.core.util.oConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,6 +77,15 @@ public class QuestionTagController extends BaseController {
 	@RequestMapping(params = "list")
 	public ModelAndView list(HttpServletRequest request) {
 		return new ModelAndView("sht/questiontag/questionTagList");
+	}
+
+
+	/**用来选择用*/
+	@RequestMapping(params = "list2")
+	public ModelAndView list2(HttpServletRequest request) {
+		String ids = oConvertUtils.getString(request.getParameter("ids"));
+		request.setAttribute("ids", ids);
+		return new ModelAndView("sht/questiontag/questionTagList2");
 	}
 
 	/**

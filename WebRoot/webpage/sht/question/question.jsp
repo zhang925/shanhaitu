@@ -21,6 +21,18 @@
 						<span class="Validform_checktip"></span>
 					</td>
 				</tr>
+
+				<tr>
+					<td align="right"><label class="Validform_label"> 标签分类: </label></td>
+					<td class="value" nowrap>
+						<input id="tagid" name="tagid"  type="hidden"  value="${questionPage.tagid}"/> <!--  从后台读取的 属性值 这是 加了 临时变量为temp -->
+						<input name="tagName" id="tagName" class="inputxt" value="${questionPage.tagName }" readonly="readonly" />
+						<t:choose hiddenName="tagid" hiddenid="id" textname="tagName" url="questionTagController.do?list2" name="questionTagList2" icon="icon-search" title="问题标签" isclear="true" isInit="true"></t:choose>
+						<span class="Validform_checktip"><t:mutiLang langKey="可多选"/></span>
+					</td>
+				</tr>
+
+
 				<tr>
 					<td align="right">
 						<label class="Validform_label">

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.jeecgframework.core.util.oConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,13 +79,15 @@ public class QuestionCategoryController extends BaseController {
 		return new ModelAndView("sht/questioncategory/questionCategoryList");
 	}
 
+
+
 	/**
 	 * easyui AJAX请求数据
 	 * 
 	 * @param request
 	 * @param response
 	 * @param dataGrid
-	 * @param user
+	 * @param
 	 */
 
 	@RequestMapping(params = "datagrid")
@@ -119,7 +122,7 @@ public class QuestionCategoryController extends BaseController {
 	/**
 	 * 添加问题分类表
 	 * 
-	 * @param ids
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(params = "save")

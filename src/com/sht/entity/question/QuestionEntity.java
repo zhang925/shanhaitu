@@ -3,17 +3,12 @@ package com.sht.entity.question;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.SequenceGenerator;
+import org.springframework.transaction.annotation.Transactional;
 
 /**   
  * @Title: Entity
@@ -41,7 +36,11 @@ public class QuestionEntity implements java.io.Serializable {
 	private java.util.Date createdTime;
 	/**访问量*/
 	private java.lang.Integer visitCount;
-	
+
+	/**临时字段*/
+	private java.lang.String tagid;
+	/**临时字段2*/
+	private java.lang.String tagName;
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  id
@@ -141,5 +140,26 @@ public class QuestionEntity implements java.io.Serializable {
 	 */
 	public void setVisitCount(java.lang.Integer visitCount){
 		this.visitCount = visitCount;
+	}
+
+	@Transient
+	public String getTagid() {
+		return tagid;
+	}
+
+	public void setTagid(String tagid) {
+		this.tagid = tagid;
+	}
+
+
+
+
+	@Transient
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 }
