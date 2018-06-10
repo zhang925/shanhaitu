@@ -135,7 +135,6 @@ public class UserRestFulController {
 
 
     /**
-     *  根据ID获取 用户的实体
      * @param
      * @param
      * @return
@@ -158,6 +157,45 @@ public class UserRestFulController {
         ajaxMsg.setResponsecode(responseCode);
         return ajaxMsg;
     }
+
+    /**
+     * 登陆 用户获取自己的 session userinfo
+     * @param
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/info",method = RequestMethod.POST)
+    @ResponseBody
+    public AjaxMsg userSessionInfo(HttpServletRequest request){
+            AjaxMsg ajaxMsg = new AjaxMsg();
+            String msg = "success";
+            Object responseCode = HttpStatus.OK.value();
+            //获取当前登陆的sessionid
+            String SESSIONID = UtilShtRest.getSessionIDFromHeader(request);
+            if(SESSIONID==null){//没有获取到了sessionid
+                ajaxMsg.setMsg("no_login");
+                ajaxMsg.setResponsecode(HttpStatus.FORBIDDEN.value());
+                return ajaxMsg;
+            }
+            MySessionContext mySessionContext = MySessionContext.getSingleInstance();
+            HttpSession session = mySessionContext.getSession(SESSIONID);
+            if(session==null){
+                ajaxMsg.setMsg("time_out");//session失效
+                ajaxMsg.setResponsecode(HttpStatus.REQUEST_TIMEOUT.value());
+                return ajaxMsg;
+            }
+            Object object = session.getAttribute("restuser");
+            UserInfo userInfo = null;
+            if(object!=null){
+                userInfo = new UserInfo((TSUser)object);
+            }
+            ajaxMsg.setMsg(msg);
+            ajaxMsg.setModel(userInfo);
+            ajaxMsg.setResponsecode(responseCode);
+            return ajaxMsg;
+    }
+
+
 
     /**
      * 根据用户名字 获取 用户实体
@@ -224,7 +262,7 @@ public class UserRestFulController {
         AjaxMsg ajaxMsg = new AjaxMsg();
         String msg = "success";
         if(StringUtil.isEmpty(tsUser.getUserName())){//用户名字
-            ajaxMsg.setResponsecode( HttpStatus.OK.value());
+            ajaxMsg.setResponsecode( HttpStatus.NOT_FOUND.value());
             ajaxMsg.setMsg("用户名字，不能为空！");
             return ajaxMsg;
         }
@@ -238,12 +276,15 @@ public class UserRestFulController {
         }
         UserInfo userInfo = UtilShtRest.saveOrUpdateUser( systemService, request,  tsUser, roleid, orgId,true);
         if(userInfo==null || userInfo.getId()==null){
-            msg = "该用户不存在!";
-        }else{
-            ajaxMsg.setModel(userInfo);
+            msg = "user "+tsUser.getUserName() +" is not exist!";//用户不存在
+            ajaxMsg.setResponsecode( HttpStatus.NOT_FOUND.value());
+            ajaxMsg.setMsg(msg);
+            return ajaxMsg;
         }
+        //往下走说明更新成功
         //修改成后，刷新 session
         //这里需要刷新两个
+        JSONObject obj = new JSONObject();
         String sessionid = UtilShtRest.getSessionIDFromHeader(request);
         if(!StringUtil.isEmpty(sessionid)){
             MySessionContext mySessionContext = MySessionContext.getSingleInstance();
@@ -251,8 +292,14 @@ public class UserRestFulController {
             if(session!=null){
                 session.removeAttribute("restuser");//移除掉以前的
                 session.removeAttribute("LOCAL_CLINET_USER");
-                session.setAttribute("restuser",UtilShtRest.getUserInfoFromHeader(request));//更新现在的
-                session.setAttribute("LOCAL_CLINET_USER",UtilShtRest.getTSUserFromHeader(request));
+                /*session.setAttribute("restuser",UtilShtRest.getUserInfoFromHeader(request));//更新现在的
+                session.setAttribute("LOCAL_CLINET_USER",UtilShtRest.getTSUserFromHeader(request));*/
+                //到这里 就的session已经失效了。我们要发起新的登陆。
+                ajaxMsg = login(userInfo.getUserName(),userInfo.getPassword(), response, request);//前端需要重新定义sessionid
+                return ajaxMsg;
+              /*  obj.put("SESSIONID", session.getId());//让前端更新session
+                obj.put("result", userInfo);
+                ajaxMsg.setModel(obj);*/
             }
         }
         ajaxMsg.setResponsecode( HttpStatus.OK.value());
@@ -431,7 +478,15 @@ public class UserRestFulController {
     }
 
 
-    @RequestMapping(value = "/reSetPassWord",method = RequestMethod.POST) // 用户 验证 邮箱 注册
+    /***
+     *  根据 用户名修改密码
+     * @param tsUser
+     * @param code
+     * @param response
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/reSetPassWord",method = RequestMethod.POST)
     @ResponseBody
     public AjaxMsg reSetPassWord(TSUser tsUser ,String code,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
@@ -447,16 +502,25 @@ public class UserRestFulController {
         String newPassword = PasswordUtil.encrypt(temp, password, PasswordUtil.getStaticSalt());
 
         List list = systemService.findHql(" from TSUser where userName='"+userName+"'",new Object[]{});
-
-        TSUser tsUser1 = (TSUser)list.get(0);
-        tsUser1.setPassword(newPassword);
-        systemService.updateEntitie(tsUser1);
-        ajaxMsg.setMsg("密码已经重置，请牢记密码: "+password);
+        if(list!=null && list.size()>0){
+            TSUser tsUser1 = (TSUser)list.get(0);
+            tsUser1.setPassword(newPassword);
+            systemService.updateEntitie(tsUser1);
+        }else{
+            ajaxMsg.setMsg("该用户不存在！");
+            ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
+            return ajaxMsg;
+        }
+        ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         return ajaxMsg;
     }
 
-    @RequestMapping(value = "/reSetPassWordOnLine",method = RequestMethod.POST) // 用户 验证 邮箱 注册
+
+    /**
+     * 在线修改密码
+     * */
+    @RequestMapping(value = "/reSetPassWordOnLine",method = RequestMethod.POST)
     @ResponseBody
     public AjaxMsg reSetPassWordOnLine(TSUser tsUser ,String code,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
@@ -499,7 +563,7 @@ public class UserRestFulController {
         String newPasswordP = PasswordUtil.encrypt(temp, newpassword, PasswordUtil.getStaticSalt());
         tsUser1.setPassword(newPasswordP);
         systemService.updateEntitie(tsUser1);
-        ajaxMsg.setMsg("密码已经重置，请牢记密码: "+newpassword);
+        ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         return ajaxMsg;
     }
