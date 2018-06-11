@@ -2,6 +2,7 @@ package com.sht.restcontroller;
 
 
 
+import com.sht.entity.articlenews.ArticleNewsEntity;
 import com.sht.entity.hotarticle.HotArticleEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
 import org.jeecgframework.core.util.StringUtil;
@@ -33,11 +34,21 @@ public class HotArticleRestController {
         AjaxMsg ajaxMsg = new AjaxMsg();
         List<HotArticleEntity> list = new ArrayList<HotArticleEntity>();
         list = systemService.getList(HotArticleEntity.class);
-        //
-
+        //热门文章不做分页，只显示全部
+        List<HotArticleEntity> listRes = new ArrayList<HotArticleEntity>();
+        if(list!=null && list.size()>0){
+            //获取文章的具体信息
+            for(HotArticleEntity h : list ){
+                if(h.getArticleId()!=null){
+                    ArticleNewsEntity articleNewsEntity = systemService.getEntity(ArticleNewsEntity.class,h.getArticleId());
+                    h.setArticleNewsEntity(articleNewsEntity);
+                    listRes.add(h);
+                }
+            }
+        }
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(list);
+        ajaxMsg.setModel(listRes);
         return ajaxMsg;
     }
 
@@ -51,7 +62,11 @@ public class HotArticleRestController {
             ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
         }
         hotArticleEntity = systemService.getEntity(HotArticleEntity.class,id);
-        //
+        //获取详情
+        if(hotArticleEntity!=null && hotArticleEntity.getArticleId()!=null){
+            ArticleNewsEntity articleNewsEntity = systemService.getEntity(ArticleNewsEntity.class,hotArticleEntity.getArticleId());
+            hotArticleEntity.setArticleNewsEntity(articleNewsEntity);
+        }
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
         ajaxMsg.setModel(hotArticleEntity);

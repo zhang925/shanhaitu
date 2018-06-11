@@ -52,7 +52,7 @@
 		    </div>
 			<div class="form">
 		      <label class="Validform_label">创建时间:</label>
-		      <input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  style="width: 150px" id="createdTime" name="createdTime" ignore="ignore"     value="<fmt:formatDate value='${articleNewsPage.createdTime}' type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" />
+		      <input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  style="width: 150px" id="createdTime" name="createdTime" required="required" datatype="*"    value="<fmt:formatDate value='${articleNewsPage.createdTime}' type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 			<div class="form">

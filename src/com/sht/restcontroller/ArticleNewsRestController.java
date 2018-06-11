@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**文章新闻列表*/
 @RestController
 @RequestMapping("/article")
 public class ArticleNewsRestController {
@@ -61,11 +62,24 @@ public class ArticleNewsRestController {
         if(!StringUtil.isEmpty(title)){//非空
             where = where + " and title like '%"+title+"%' ";
         }
-        sql = sql + where;
         countSql = countSql + where;
+        where = where + " order by created_time DESC ";
+        sql = sql + where;
         long num  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数
         Integer page = UtilSht.getPage(request);
         Integer row = UtilSht.getRow(request);
+
+        String id = articleNewsEntity.getId();
+        if(StringUtil.isNotEmpty(id)){//点击详情的时候，需要计算 当前选中的文章新闻的序号。
+            //根据ID计算序号
+           /* SELECT rownum from
+
+                    ( select (@i:=@i+1) rownum , s.* from test s,(select @i:=0) t  ) tt
+
+            where tt.name='测试'*/
+        }
+
+
         int total = (int)num;//总条数
         Integer totalPage = (total%row==0) ? (total/row) : ((total/row)+1);
         if(page >= totalPage){

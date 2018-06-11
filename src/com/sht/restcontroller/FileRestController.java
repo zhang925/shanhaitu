@@ -2,10 +2,7 @@ package com.sht.restcontroller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +14,7 @@ import java.util.Date;
 /**
  * 文件上传下载的 公用类
  */
-@Controller
+@RestController
 @RequestMapping("file")
 public class FileRestController {
 
@@ -89,19 +86,17 @@ public class FileRestController {
             SimpleDateFormat sd2 = new SimpleDateFormat("yyyyMMddHHmmss");//格式化 文件 名字的前缀
             //因为 Spring MVC 对静态 资源的控制原因，这里的file 上传到，"WEB-INF/skin/"下面
             String originname = file.getOriginalFilename();//文件的原名字
-            String addPath= "WEB-INF/skin/" + "uploadfile/noticefile/"+timestr+"/"+sd2.format(new Date())+originname;
+            String addPath= "userfiles/rest/noticefile/userid/"+timestr+"/"+sd2.format(new Date())+originname;
             String path = basePath + addPath;
             File newFile=new File(path);
             if(!newFile.exists()){
                 newFile.mkdirs();
             }
             file.transferTo(newFile);//通过CommonsMultipartFile的方法直接写文件
-            resMsg =  addPath.replace("WEB-INF/","");
             response.setCharacterEncoding("UTF8");
-            response.getWriter().write(resMsg);
+            response.getWriter().write(addPath);
         } catch (Exception e) {
             e.printStackTrace();
-            resMsg = "error";
         }
 
 

@@ -3,17 +3,12 @@ package com.sht.entity.hotarticle;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.sht.entity.articlenews.ArticleNewsEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.SequenceGenerator;
 
 /**   
  * @Title: Entity
@@ -41,6 +36,9 @@ public class HotArticleEntity implements java.io.Serializable {
 	private double orders;
 	/**文章状态*/
 	private java.lang.String status;
+
+	/**文章新闻信息 临时 实体*/
+	private ArticleNewsEntity articleNewsEntity;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -141,5 +139,14 @@ public class HotArticleEntity implements java.io.Serializable {
 	 */
 	public void setStatus(java.lang.String status){
 		this.status = status;
+	}
+
+	@Transient
+	public ArticleNewsEntity getArticleNewsEntity() {
+		return articleNewsEntity;
+	}
+
+	public void setArticleNewsEntity(ArticleNewsEntity articleNewsEntity) {
+		this.articleNewsEntity = articleNewsEntity;
 	}
 }

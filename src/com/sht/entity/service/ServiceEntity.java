@@ -53,6 +53,8 @@ public class ServiceEntity implements java.io.Serializable {
 	private java.lang.String status;
 	/**创建时间*/
 	private java.util.Date createdTime;
+
+
 	
 	/**
 	 *方法: 取得java.lang.String
