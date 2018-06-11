@@ -18,7 +18,7 @@
 
 			<div class="form">
 		      <label class="Validform_label">发布时间:</label>
-		      <input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  style="width: 150px" id="publishTime" name="publishTime" ignore="ignore"     value="<fmt:formatDate value='${selectedArticlesPage.publishTime}' type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" />
+		      <input class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  style="width: 150px" id="publishTime" name="publishTime" datatype="*"     value="<fmt:formatDate value='${selectedArticlesPage.publishTime}' type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 			<div class="form">
@@ -28,7 +28,7 @@
 		    </div>
 			<div class="form">
 		      <label class="Validform_label">排序:</label>
-		      <input class="inputxt" id="orders" name="orders" ignore="ignore"   value="${selectedArticlesPage.orders}" />
+		      <input class="inputxt" id="orders" name="orders" datatype="*"  <c:if test="${selectedArticlesPage.orders==null || selectedArticlesPage.orders=='' }"> value="0"</c:if>   value="${selectedArticlesPage.orders}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 	    </fieldset>

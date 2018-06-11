@@ -52,7 +52,7 @@
 		    </div>
 			<div class="form">
 		      <label class="Validform_label">创建时间:</label>
-		      <input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  style="width: 150px" id="createdTime" name="createdTime" ignore="ignore"     value="<fmt:formatDate value='${investigateReportPage.createdTime}' type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" />
+		      <input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  style="width: 150px" id="createdTime" name="createdTime" datatype="*"     value="<fmt:formatDate value='${investigateReportPage.createdTime}' type="date" pattern="yyyy-MM-dd hh:mm:ss"/>" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 			<div class="form">
@@ -72,7 +72,7 @@
 		    </div>
 			<div class="form">
 		      <label class="Validform_label">排序:</label>
-		      <input class="inputxt" id="orders" name="orders" ignore="ignore"   value="${investigateReportPage.orders}" />
+				<input class="inputxt" id="orders" name="orders" datatype="*"  <c:if test="${investigateReportPage.orders==null || investigateReportPage.orders=='' }"> value="0"</c:if>   value="${investigateReportPage.orders}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
 	    </fieldset>

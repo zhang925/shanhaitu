@@ -56,7 +56,7 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	/** 状态*/
 	private java.lang.String status;
 	/**排序*/
-	private java.lang.String orders;
+	private double orders;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -275,7 +275,7 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	 *@return: java.lang.String  排序
 	 */
 	@Column(name ="ORDERS",nullable=true,length=11)
-	public java.lang.String getOrders(){
+	public double getOrders(){
 		return this.orders;
 	}
 
@@ -283,7 +283,7 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	 *方法: 设置java.lang.String
 	 *@param: java.lang.String  排序
 	 */
-	public void setOrders(java.lang.String orders){
+	public void setOrders(double orders){
 		this.orders = orders;
 	}
 }

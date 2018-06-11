@@ -38,7 +38,7 @@ public class HotArticleEntity implements java.io.Serializable {
 	/**下架时间*/
 	private java.util.Date closingTime;
 	/**排序*/
-	private java.lang.String orders;
+	private double orders;
 	/**文章状态*/
 	private java.lang.String status;
 	
@@ -114,8 +114,8 @@ public class HotArticleEntity implements java.io.Serializable {
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  排序
 	 */
-	@Column(name ="ORDERS",nullable=true,length=32)
-	public java.lang.String getOrders(){
+	@Column(name ="ORDERS",nullable=true,length=11)
+	public double getOrders(){
 		return this.orders;
 	}
 
@@ -123,7 +123,7 @@ public class HotArticleEntity implements java.io.Serializable {
 	 *方法: 设置java.lang.String
 	 *@param: java.lang.String  排序
 	 */
-	public void setOrders(java.lang.String orders){
+	public void setOrders(double orders){
 		this.orders = orders;
 	}
 	/**

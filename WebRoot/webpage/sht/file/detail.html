@@ -1,0 +1,240 @@
+<pre>
+<h1>修改,查看公告</h1>
+<div>
+	<form id="fnotice">
+		<div id="showdiv" style="border: 1px solid blue;width: 500px;">
+		<input id="opttype"  hidden="hidden" name="opttype" value="${type}" />
+		 <input id="id"  hidden="hidden"  name="id" value="${notice.id}" />
+		标题 : <input id="title" name="title" value="${notice.title}" />
+		内容 : <textarea cols="30" rows="3" id="content" name="content">${notice.content}</textarea>
+		<!--类型 : <input id="type" name="type" value="${notice.type}" />
+		公开范围 : <input id="level" name="level" value="${notice.level}" />
+		-->
+		类型 : <!--<input id="type" name="type" value="" />-->
+			<select id="type" name="type">
+				<option value="0" #if($notice.type == 0 ) selected="selected" #end >通知</option>
+				<option value="1" #if($notice.type == 1 ) selected="selected" #end >公告</option>
+			</select>
+
+		公开范围 : <!--<input id="level" name="level" value="" />-->
+			<select id="level" name="level">
+				<option value="0" #if($notice.type == 0 ) selected="selected" #end >所有人</option>
+				<option value="1" #if($notice.type == 1 ) selected="selected" #end >系统已注册人员</option>
+				<option value="2" #if($notice.type == 2 ) selected="selected" #end >单位管理员</option>
+				<option value="3" #if($notice.type == 3 ) selected="selected" #end >专家</option>
+			</select>
+
+		状态：<input type="hidden" id="state" name="state" value="" />
+			<input disabled  #if($notice.state == 1 ) value="发布"    #end #if($notice.state == 0 ) value="未发布"   #end  />
+		<!--<select id="state" name="state" readonly="readonly">
+				<option value="1" #if($notice.state == 1 ) selected="selected" #end >发布</option>
+				<option value="0" #if($notice.state == 0 ) selected="selected" #end >未发布</option>
+		</select>-->
+		<!--附件链接地址 : <textarea cols="30" rows="3" id="linkurl" name="linkurl" >${notice.linkurl}</textarea>-->
+		附件：<input type="button" value="选择文件" id="fileTemp" name="fileTemp" /> <span id="showFileName"></span>
+		<input id="uploadFile" type="button" value="上传附件" />
+		<span id="shownfile" style="cursor: pointer;color: blue;" ></span>
+		<input type="hidden" id="linkurl" name="linkurl" value="${notice.linkurl}" />
+
+		起始时间 : <input id="startdate" name="startdate" value="${notice.startdate}" />
+		结束时间 : <input id="enddate" name="enddate" value="${notice.enddate}" />
+		</div>
+		<div id="disdiv" style="border: 1px solid red;width: 500px;">
+		<input id="createuserid" type="hidden" readonly="readonly" name="createuserid" value="${notice.createuserid}" />
+		创建人姓名 : <input id="createusername" readonly="readonly" name="createusername" value="${notice.createusername}" />
+		创建时间: <input id="createtime" readonly="readonly" name="createtime" value="${notice.createtime}" />
+
+       </div>
+	</form>
+	<div id="tijiao"><!--1. 已经发布的撤回，0,未发布草,草稿的发布，编辑-->
+#if($notice.state==0)<button type="button" onclick="update(1)">发布</button>
+        #else<button type="button" onclick="update(0)">撤销发布</button>#end
+        <button type="button" onclick="update(2)"> 保存修改 </button>
+	</div>
+	<a href="javascript:history.go(-1);">返回上一级</a>
+
+
+	<div style="display: none"> <!--  上传附件的 隐藏 表单 -->
+		<form id="uploadFileForm" action="#" enctype="multipart/form-data" >
+			<input type="file" id="file" name="file">
+		</form>
+	</div>
+
+</div>
+</pre>
+<script type="text/javascript">
+	function chexiao() {
+        $("#state").val("0");//设置成未发布
+        update('确定撤销吗？');
+    }
+function fabu() {//修改个状态而已。
+    $("#state").val("1");//设置成未发布
+    update('');
+}
+function update(state){
+	var title = "";
+	if(state==1){//发布
+		title = "确定发布吗？";
+	}else if(state==0){//撤销
+        title = "确定撤销吗？";
+	}else if(state==2){//修改
+        state = "${notice.state}";
+		title = "确定修改吗？";
+	}
+	if(!confirm(title)){
+		return;
+	}
+    $("#state").val(state);//设置成发布
+	 $.ajax({
+		url:"${path}/notice/update",
+		Type:"POST",
+		aysnc:false,
+		data:$("#fnotice").serialize(),
+		dataType:"json",
+		success:function(data){
+			console.log(data.message);
+			alert("成功！");
+			location.href= "${path}/notice/list";
+		},
+		error:function(data){
+			console.log("异常！！！");
+			console.log(data);
+		}
+	});
+}
+
+
+	(function() {
+        initAttachment();//初始化 下载项目
+		var optType = "${optType}";
+		if("detail"==optType){//是查看
+			$("#tijiao").hide();
+			$("#showdiv input,select,textarea").attr("readonly","readonly");
+		}else{
+			$("#showdiv input,select,textarea").removeAttr("readonly");
+		}
+	})();
+
+	function initAttachment() {
+
+        var optType = "${optType}";
+		var src = "${notice.linkurl}";
+        //找到服务起的文件名。
+        var fileName = src.substring(src.lastIndexOf("/"),src.length);
+        var originname  = fileName.substring(15,src.length);
+
+        if("detail"==optType){//是查看
+            // 隐藏上传功能
+            $("#fileTemp").hide();
+            $("#uploadFile").hide();
+            $("#shownfile").html(originname + "  <a onclick='downfile(\""+src+"\")'>下载</a> ");
+        }else{
+            $("#shownfile").html(originname + "  <span onclick='delfile()'>删除</span>   <a onclick='downfile(\""+src+"\")'>下载</a> ");
+        }
+
+    }
+
+
+
+
+
+
+    $("#fileTemp").on('click',function(e){//监听 临时按钮是否 点击，点击了的话 选择文件的input 跟着点击
+        document.getElementById("file").click();//选择文件
+    });
+
+    $("#file").on('input',function(e){//监听 临时按钮是否 点击，点击了的话 选择文件的input 跟着点击
+        var fileName = $("#file").val();
+        if(fileName){
+            fileName = fileName.substring((fileName.lastIndexOf("\\")+1),fileName.length);
+        }
+        $("#showFileName").text(fileName);
+    });
+
+
+    $("#uploadFile").on("click",function () {
+        //判断是否已经上传了。
+        /*var isUplod = $("#showFileName").html();
+        if(isUplod){//说明已经上传了
+            if(!confirm("是否覆盖已经上传的附件")){
+                return;
+            }
+        }*/
+        uploadFile();
+
+    });
+    function uploadFile(){
+        var formData = new FormData($( "#uploadFileForm" )[0]);
+        var fileName = $("#file").val();
+        if(!fileName){
+            alert("请选择要上传的文件");
+            return;
+        }
+        var ajaxUrl = "${path}/file/save/notice";
+        //alert(ajaxUrl);
+        //$('#uploadPic').serialize() 无法序列化二进制文件，这里采用formData上传
+        //需要浏览器支持：Chrome 7+、Firefox 4+、IE 10+、Opera 12+、Safari 5+。
+        $.ajax({
+            type: "POST",
+            //dataType: "text",
+            url: ajaxUrl,
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data)
+                var src = data;
+                //找到服务起的文件名。
+                var fileName = src.substring(src.lastIndexOf("/"),src.length);
+                var originname  = fileName.substring(15,src.length);
+                var origin = location.origin;
+
+                $("#linkurl").val(src);//保存附件地址
+                $("#shownfile").html(originname + "  <span onclick='delfile(\""+src+"\")'>删除</span>   <a onclick='downfile(\""+src+"\")'>下载</a> ");
+
+
+            },
+            error: function(data) {
+                console.log("上传出错：")
+                console.log(data)
+                console.log(data.responseText)
+            }
+        });
+        return false;
+    }
+
+    function delfile(src){
+        if(confirm("确认删除吗？")){//文件 没有真正意义删除。
+            $("#shownfile").html("");
+            $("#linkurl").val("");//附件地址 清空
+            doDelete(src);//执行删除文件的真实操作
+        }
+        alert("点击保存后生效。")
+    }
+
+
+    function  doDelete(src) {
+        var ajaxUrl = "${path}/file/delete";
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl,
+            dataType:"json",
+            data: {"src":src},
+            async: true,
+            success: function (data) {
+                console.log(data);
+
+            },
+            error: function(data) {
+                console.log("出错："+data);
+            }
+        });
+    }
+
+    function downfile(src){
+        location.href = "${path}/file/down/src?src="+src;
+    }
+
+</script>

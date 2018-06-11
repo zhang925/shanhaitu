@@ -1,0 +1,175 @@
+<pre>
+<h1>发布公告</h1>
+<div>
+
+	<form id="fnotice" >
+	<!-- action="${path}/notice/add" -->
+		<div style="border: 1px solid blue;width: 500px;">
+		<input hidden="hidden" id="opttype" name="opttype" value="${type}" />
+
+		标题 : <input id="title" name="title" value="" />
+		内容 : <textarea cols="30" rows="3" id="content" name="content"></textarea>
+		类型 : <!--<input id="type" name="type" value="" />-->
+			<select id="type" name="type">
+				<option value="0">通知</option>
+				<option value="1">公告</option>
+			</select>
+		公开范围 : <!--<input id="level" name="level" value="" />-->
+			<select id="level" name="level">
+				<option value="0">所有人</option>
+				<option value="1">系统已注册人员</option>
+				<option value="2">单位管理员</option>
+				<option value="3">专家</option>
+			</select>
+
+			<input type="button" value="选择文件" id="fileTemp" name="fileTemp" /> <span id="showFileName"></span>
+
+			<input id="uploadFile" type="button" value="上传附件" />
+				<span id="shownfile" style="cursor: pointer;color: blue;" > </span>
+		 <input type="hidden" id="linkurl" name="linkurl"/>
+		起始时间 : <input id="startdate" name="startdate" value="" />
+		结束时间 : <input id="enddate" name="enddate" value="" />
+		</div>
+		<div style="border: 1px solid red;width: 500px;">
+		创建人ID : <input id="createuserid" disabled="disabled" name="createuserid" value="" />
+		创建人姓名 : <input id="createusername" disabled="disabled" name="createusername" value="" />
+		创建时间: <input id="createtime" disabled="disabled" name="createtime" value="" />
+
+			<input id="state"  type="hidden" name="state" value="" />
+		</div>
+		<!-- <input type="submit" value="FROM提交表单" /> -->
+	</form>
+	<button type="button" onclick="save()"> 确认发布</button> || <button type="button" onclick="saveDraft()"> 保存到草稿</button>
+</div>
+
+
+	<div style="display: none"> <!--  上传附件的 隐藏 表单 -->
+		<form id="uploadFileForm" action="#" enctype="multipart/form-data" >
+			<input type="file" id="file" name="file">
+		</form>
+	</div>
+
+</pre>
+<script>
+
+    function saveDraft(){//保存到草稿
+        $("#state").val("0");//草稿状态。
+        save();
+	}
+function save(){
+	 $.ajax({
+		url:"${path}/notice/save",
+		Type:"POST",
+		aysnc:false,
+		data:$("#fnotice").serialize(),
+		dataType:"json",
+		success:function(data){
+			console.log("保存成功！");
+			console.log(data.message);
+			alert("保存成功！");
+			location.href= "${path}/notice/index";
+		},
+		error:function(data){
+			console.log(data);
+			location.href= "${path}/notice/index";
+		}
+	});
+}
+
+    $("#fileTemp").on('click',function(e){//监听 临时按钮是否 点击，点击了的话 选择文件的input 跟着点击
+		document.getElementById("file").click();//选择文件
+    });
+
+    $("#file").on('input',function(e){//监听 临时按钮是否 点击，点击了的话 选择文件的input 跟着点击
+		var fileName = $("#file").val();
+		if(fileName){
+            fileName = fileName.substring((fileName.lastIndexOf("\\")+1),fileName.length);
+		}
+		$("#showFileName").text(fileName);
+    });
+
+
+	$("#uploadFile").on("click",function () {
+	    //判断是否已经上传了。
+		/*var isUplod = $("#showFileName").html();
+	    if(isUplod){//说明已经上传了
+            if(!confirm("是否覆盖已经上传的附件")){
+                return;
+            }
+		}*/
+
+        uploadFile();
+
+	});
+    function uploadFile(){
+        var formData = new FormData($( "#uploadFileForm" )[0]);
+        var fileName = $("#file").val();
+        if(!fileName){
+            alert("请选择要上传的文件");
+            return;
+		}
+        var ajaxUrl = "${path}/file/save/notice";
+        //alert(ajaxUrl);
+        //$('#uploadPic').serialize() 无法序列化二进制文件，这里采用formData上传
+        //需要浏览器支持：Chrome 7+、Firefox 4+、IE 10+、Opera 12+、Safari 5+。
+        $.ajax({
+            type: "POST",
+            //dataType: "text",
+            url: ajaxUrl,
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data)
+				var src = data;
+                //找到服务起的文件名。
+				var fileName = src.substring(src.lastIndexOf("/"),src.length);
+                var originname  = fileName.substring(15,src.length);
+
+                $("#linkurl").val(src);//保存附件地址
+                $("#shownfile").html(originname + "  <span onclick='delfile(\""+src+"\")'>删除</span>   <a onclick='downfile(\""+src+"\")'>下载</a> ");
+
+
+            },
+            error: function(data) {
+                console.log("上传出错：")
+                console.log(data)
+            }
+        });
+        return false;
+    }
+
+    function delfile(src){
+		if(confirm("确认删除吗？")){//文件 没有真正意义删除。
+            $("#shownfile").html("");
+            $("#linkurl").val("");//附件地址 清空
+            doDelete(src);//执行删除文件的真实操作
+		}
+	}
+
+	function  doDelete(src) {
+        var ajaxUrl = "${path}/file/delete";
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl,
+			dataType:"json",
+            data: {"src":src},
+            async: true,
+            success: function (data) {
+                console.log(data);
+
+            },
+            error: function(data) {
+                console.log("出错："+data);
+            }
+        });
+    }
+    function downfile(src){
+        location.href = "${path}/file/down/src?src="+src;
+    }
+
+</script>
+
+</script>

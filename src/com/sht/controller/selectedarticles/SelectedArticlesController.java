@@ -84,11 +84,14 @@ public class SelectedArticlesController extends BaseController {
 	 * @param request
 	 * @param response
 	 * @param dataGrid
-	 * @param user
+	 * @param
 	 */
 
 	@RequestMapping(params = "datagrid")
 	public void datagrid(SelectedArticlesEntity selectedArticles,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+		//强制排序
+		dataGrid.setSort("orders");
+		dataGrid.setOrder("asc");
 		CriteriaQuery cq = new CriteriaQuery(SelectedArticlesEntity.class, dataGrid);
 		//查询条件组装器
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, selectedArticles, request.getParameterMap());
@@ -119,7 +122,7 @@ public class SelectedArticlesController extends BaseController {
 	/**
 	 * 添加精选文章
 	 * 
-	 * @param ids
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(params = "save")
@@ -131,9 +134,16 @@ public class SelectedArticlesController extends BaseController {
 			message = "精选文章更新成功";
 			SelectedArticlesEntity t = selectedArticlesService.get(SelectedArticlesEntity.class, selectedArticles.getId());
 			try {
+				double oldOrder = t.getOrders();//放到前面获取，不然后覆盖
+				double newOrder =  selectedArticles.getOrders();
+
 				MyBeanUtils.copyBeanNotNull2Bean(selectedArticles, t);
 				selectedArticlesService.saveOrUpdate(t);
-				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+
+				//一定要保存后重新排序。
+				softOrder( oldOrder, newOrder);//重新排序
+
+				//systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
 				message = "精选文章更新失败";
@@ -141,7 +151,8 @@ public class SelectedArticlesController extends BaseController {
 		} else {
 			message = "精选文章添加成功";
 			selectedArticlesService.save(selectedArticles);
-			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
+			softOrder( -1, selectedArticles.getOrders());//重新排序
+			//systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}
 		j.setMsg(message);
 		return j;
@@ -218,5 +229,42 @@ public class SelectedArticlesController extends BaseController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") String id) {
 		selectedArticlesService.deleteEntityById(SelectedArticlesEntity.class, id);
+	}
+
+
+	/**
+	 *
+	 * 添加修改的时候重新 排序，其他不用管
+	 * @param oldOrder 旧的序号，-1 表示添加
+	 * @param newOrder 新的序号
+	 */
+	public  void softOrder(double oldOrder,double newOrder){
+		if(oldOrder == newOrder){//没有改。
+			return;
+		}
+		List<SelectedArticlesEntity> list =  systemService.findHql(" from SelectedArticlesEntity as a ORDER BY a.orders ASC ",null);
+
+		if(list!=null && list.size()>0){//这种是全部排序最简单，后期数据量大的情况下，在优化。
+			//更新数据库
+			//判段从哪个地方 更改的
+			if(newOrder<=list.size()){
+				double temp = 0;
+				if(oldOrder==-1){//说明是 添加,并且是往前面排序
+					temp = newOrder;
+				}else{
+					temp = ( newOrder <= oldOrder )? newOrder : oldOrder;//新旧排序，谁小取谁
+					if(temp<0){//用户填了个负数
+						temp =0;//认为是第一位
+					}
+				}
+				for(double i=temp;i<list.size();i++){//比较消耗系统资源，但是没有办法
+					SelectedArticlesEntity model = list.get((int)i);
+					model.setOrders(((int)i+1));
+					systemService.updateEntitie(model);
+				}
+			}
+
+
+		}
 	}
 }

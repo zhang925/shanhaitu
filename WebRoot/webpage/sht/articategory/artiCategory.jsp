@@ -20,10 +20,12 @@
 
             <div class="form">
                 <label class="Validform_label">排序:</label>
-                <input class="inputxt" id="orders" name="orders" ignore="ignore"   value="${artiCategoryPage.orders}" />
+
+                <input class="inputxt" id="orders" name="orders" datatype="*"  <c:if test="${artiCategoryPage.orders==null || artiCategoryPage.orders=='' }"> value="0"</c:if>   value="${artiCategoryPage.orders}" />
                 <span class="Validform_checktip"></span>
             </div>
 
 	    </fieldset>
+
   </t:formvalid>
  </body>

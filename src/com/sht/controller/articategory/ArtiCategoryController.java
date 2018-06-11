@@ -1,10 +1,13 @@
 package com.sht.controller.articategory;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Restrictions;
+import org.jeecgframework.tag.vo.datatable.SortDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
+
+import java.util.Map;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -84,13 +89,15 @@ public class ArtiCategoryController extends BaseController {
 	 * @param request
 	 * @param response
 	 * @param dataGrid
-	 * @param user
+	 * @param
 	 */
 
 	@RequestMapping(params = "datagrid")
 	public void datagrid(ArtiCategoryEntity artiCategory,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+		//强制排序
+		dataGrid.setSort("orders");
+		dataGrid.setOrder("asc");
 		CriteriaQuery cq = new CriteriaQuery(ArtiCategoryEntity.class, dataGrid);
-		//查询条件组装器
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, artiCategory, request.getParameterMap());
 		this.artiCategoryService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -119,7 +126,7 @@ public class ArtiCategoryController extends BaseController {
 	/**
 	 * 添加文章分类
 	 * 
-	 * @param ids
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(params = "save")
@@ -131,9 +138,13 @@ public class ArtiCategoryController extends BaseController {
 			message = "文章分类更新成功";
 			ArtiCategoryEntity t = artiCategoryService.get(ArtiCategoryEntity.class, artiCategory.getId());
 			try {
+				double oldOrder = t.getOrders();//放到前面获取，不然后覆盖
+				double newOrder =  artiCategory.getOrders();
 				MyBeanUtils.copyBeanNotNull2Bean(artiCategory, t);
 				artiCategoryService.saveOrUpdate(t);
-				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+				//一定要保存后重新排序。
+				softOrder( oldOrder, newOrder);//重新排序
+				//systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
 				message = "文章分类更新失败";
@@ -141,7 +152,8 @@ public class ArtiCategoryController extends BaseController {
 		} else {
 			message = "文章分类添加成功";
 			artiCategoryService.save(artiCategory);
-			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
+			softOrder( -1, artiCategory.getOrders());//重新排序
+			//systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}
 		j.setMsg(message);
 		return j;
@@ -219,4 +231,45 @@ public class ArtiCategoryController extends BaseController {
 	public void delete(@PathVariable("id") String id) {
 		artiCategoryService.deleteEntityById(ArtiCategoryEntity.class, id);
 	}
+
+
+
+
+	/**
+	 *
+	 * 添加修改的时候重新 排序，其他不用管
+	 * @param oldOrder 旧的序号，-1 表示添加
+	 * @param newOrder 新的序号
+	 */
+	public  void softOrder(double oldOrder,double newOrder){
+		if(oldOrder == newOrder){//没有改。
+			return;
+		}
+		List<ArtiCategoryEntity> list =  systemService.findHql(" from ArtiCategoryEntity as a ORDER BY a.orders ASC ",null);
+
+		if(list!=null && list.size()>0){//这种是全部排序最简单，后期数据量大的情况下，在优化。
+			//更新数据库
+			//判段从哪个地方 更改的
+			if(newOrder<=list.size()){
+				double temp = 0;
+				if(oldOrder==-1){//说明是 添加,并且是往前面排序
+					temp = newOrder;
+				}else{
+					 temp = ( newOrder <= oldOrder )? newOrder : oldOrder;//新旧排序，谁小取谁
+					if(temp<0){//用户填了个负数
+						temp =0;//认为是第一位
+					}
+				}
+				for(double i=temp;i<list.size();i++){//比较消耗系统资源，但是没有办法
+					ArtiCategoryEntity model = list.get((int)i);
+					model.setOrders((int)i+1);
+					systemService.updateEntitie(model);
+				}
+			}
+
+
+		}
+	}
+
+
 }

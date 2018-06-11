@@ -110,7 +110,20 @@ public class QuestionController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		question = systemService.getEntity(QuestionEntity.class, question.getId());
 		message = "问题删除成功";
+		//删除  与问题和标签的关系表
+
+		//删除以前的关系
+		List<QuestionRelationTagEntity> list = systemService.findHql(" from QuestionRelationTagEntity where questionId=?",new Object[]{question.getId()});
+		if(list!=null && list.size()>0){
+			for(QuestionRelationTagEntity q : list){
+				//删除掉以前的关系
+				systemService.deleteEntityById(QuestionRelationTagEntity.class,q.getId());
+			}
+		}
+
+
 		questionService.delete(question);
+
 		systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 		
 		j.setMsg(message);
