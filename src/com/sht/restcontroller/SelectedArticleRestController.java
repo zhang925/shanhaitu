@@ -138,7 +138,7 @@ public class SelectedArticleRestController {
             last = true;
         }
         Map preMap = null;//上一篇
-        Map mapNow = null; //本篇
+        Map nowMap = null; //本篇
         Map nextMap = null;//下一篇
         if(!first){//不是第一篇计算 上一篇
             //上一篇
@@ -147,7 +147,7 @@ public class SelectedArticleRestController {
         }
         //本篇
         String sql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from  "+tableSql+" s,(select @i:=0) t ) tt  where rownum ="+ num;
-        mapNow = systemService.findOneForJdbc(sql);
+        nowMap = systemService.findOneForJdbc(sql);
 
         if(!last){//不是最后一篇，计算下一篇
             //下一篇
@@ -157,7 +157,7 @@ public class SelectedArticleRestController {
 
         JSONObject obj = new JSONObject();
         obj.put("preActicle", preMap);//上一篇
-        obj.put("nowActicle", mapNow);//本篇
+        obj.put("nowActicle", nowMap);//本篇
         obj.put("nextActicle", nextMap);//下一篇
         obj.put("first",first);//是否是第一条
         obj.put("last",last);//是否是最后一条
