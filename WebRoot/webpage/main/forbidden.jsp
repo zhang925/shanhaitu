@@ -9,7 +9,8 @@
 
 <body >
 <center>
-    <img src="../../images/forbidden.jpg" width="800px" height="800px" />
+    <h1 style="color: red;">  FORBIDDEN ! NO PASS ! </h1>
+    <img src="<%=basePath%>/images/forbidden.jpg" title="FORBIDDEN ! NO PASS !" alt="FORBIDDEN ! NO PASS !" width="800px" height="800px" />
 </center>
 </body>
 
