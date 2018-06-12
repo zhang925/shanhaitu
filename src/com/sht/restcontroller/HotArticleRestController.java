@@ -67,11 +67,23 @@ public class HotArticleRestController {
             ajaxMsg.setMsg("未获取到ID信息");
             return ajaxMsg;
         }
+
+        //以后每次重写这个tableSql 就行了
+        //获取 所有 热门文章 的 sql
+        String tableSql = " ( SELECT " +
+                "        ha.id ,sa.title,sa.summary,sa.content,sa.author, " +
+                "                sa.creator,sa.editor,sa.created_time,sa.cate_id, " +
+                "                sa.image_url,sa.like_count,sa.visit_count, " +
+                "                ha.publish_time,ha.closing_time,ha.orders,ha.`status` " +
+                "        FROM sht_hot_article AS ha , sht_article_news AS sa  WHERE sa.id = ha.article_id " +
+                "        ORDER BY ha.orders ASC )   ";
+
+
         //计算本篇的位置
         int num = 0;
         if(StringUtil.isNotEmpty(id)){//点击详情的时候，需要计算 当前选中的文章新闻的序号。
             //根据ID计算序号
-            String numSql = " SELECT rownum from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where tt.id='"+id+"' ";
+            String numSql = " SELECT rownum from ( select (@i:=@i+1) rownum , s.* from "+ tableSql +" as  s ,(select @i:=0) t ) tt  where tt.id='"+id+"' ";
             Map map = systemService.findOneForJdbc(numSql);
             if(map!=null){
                 Object rownumObj = map.get("rownum");//获取该条数据在数据库中的位置
@@ -83,7 +95,7 @@ public class HotArticleRestController {
             }
         }
         //总条数
-        String countSql = "select count(0) from sht_article_news  where 1=1  ";
+        String countSql = "select count(0) from  "+ tableSql +" as s  where 1=1  ";
         long total  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数，只要能进这个方法说明至少有哦一条数据
         int totalNum = (int)total;
         int preNum=1;//前一条数据
@@ -104,14 +116,7 @@ public class HotArticleRestController {
         Map mapNow = null; //本篇
         Map nextMap = null;//下一篇
 
-        //以后每次重写这个tableSql 就行了
-        String tableSql = " ( SELECT " +
-                "        ha.id ,sa.title,sa.summary,sa.content,sa.author, " +
-                "                sa.creator,sa.editor,sa.created_time,sa.cate_id, " +
-                "                sa.image_url,sa.like_count,sa.visit_count, " +
-                "                ha.publish_time,ha.closing_time,ha.orders,ha.`status`\n" +
-                "        FROM sht_hot_article AS ha , sht_article_news AS sa  WHERE sa.id = ha.article_id " +
-                "        ORDER BY ha.orders ASC ) ";
+
         /*
         SELECT ha.id ,sa.title,sa.summary,sa.content,sa.author,  sa.creator,sa.editor,sa.created_time,sa.cate_id, sa.image_url,sa.like_count,sa.visit_count,
         ha.publish_time,ha.closing_time,ha.orders,ha.`status`

@@ -1,8 +1,10 @@
 package com.sht.restcontroller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sht.entity.articlenews.ArticleNewsEntity;
 import com.sht.entity.investigatereport.InvestigateReportEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
+import com.sht.restcontroller.util.UtilSht;
 import com.sht.service.investigatereport.InvestigateReportServiceI;
 import org.apache.log4j.Logger;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
@@ -32,6 +34,7 @@ import javax.validation.Validator;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**   
@@ -53,12 +56,44 @@ public class InvestReportRestController {
 	@ResponseBody
 	public AjaxMsg list(InvestigateReportEntity investigateReportEntity, HttpServletResponse response, HttpServletRequest request){
 		AjaxMsg ajaxMsg = new AjaxMsg();
-		List<InvestigateReportEntity> list = new ArrayList<InvestigateReportEntity>();
-		list = systemService.getList(InvestigateReportEntity.class);
-		//
+		///List<InvestigateReportEntity> list = new ArrayList<InvestigateReportEntity>();
+		//list = systemService.getList(InvestigateReportEntity.class);
+		//需要分页
+
+		String sql = " SELECT * from sht_investigate_report where 1=1 ";
+		String countSql = "select count(0) from sht_investigate_report where 1=1  ";
+
+		/* String where = "";
+        //拼接条件
+        sql = sql + where;
+        countSql = countSql + where;*/
+
+		long num  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数
+		Integer page = UtilSht.getPage(request);
+		Integer row = UtilSht.getRow(request);
+		int total = (int)num;
+		Integer totalPage = (total%row==0) ? (total/row) : ((total/row)+1);
+		if(page >= totalPage){
+			page = totalPage;
+		}
+		if(page==0){
+			page =1;
+		}
+		if(totalPage == 0){
+			totalPage =1;
+		}
+		List<Map<String, Object>> list2 = systemService.findForJdbc(sql,page,row);
+		JSONObject obj = new JSONObject();
+		obj.put("result", list2);
+		obj.put("total",total);
+		obj.put("totalPage",totalPage);
+		obj.put("page",page);
+		obj.put("row",row);
+
+
 		ajaxMsg.setMsg("success");
 		ajaxMsg.setResponsecode(HttpStatus.OK.value());
-		ajaxMsg.setModel(list);
+		ajaxMsg.setModel(obj);
 		return ajaxMsg;
 	}
 

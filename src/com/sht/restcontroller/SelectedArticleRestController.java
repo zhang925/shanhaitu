@@ -97,10 +97,18 @@ public class SelectedArticleRestController {
             return ajaxMsg;
         }
         //计算本篇的位置
+
+        String tableSql = "( SELECT ss.id as id ,ss.publish_time as publish_time , ss.closing_time  as closing_time, " +
+                "ss.orders as orders, ss.article_id as article_id,sa.title as  title , sa.summary as summary, " +
+                "sa.content as content, sa.author as author,sa.creator_id as creator_id,sa.editor_id as editor_id, " +
+                "sa.creator as creator, sa.editor as editor,sa.created_time as created_time,sa.`status` as `status`, " +
+                "sa.image_url as image_url, sa.like_count as like_count, sa.visit_count as visit_count " +
+                " FROM sht_selected_articles as ss, sht_article_news as sa WHERE ss.article_id = sa.id )   ";
+
         int num = 0;
         if(StringUtil.isNotEmpty(id)){//点击详情的时候，需要计算 当前选中的文章新闻的序号。
             //根据ID计算序号
-            String numSql = " SELECT rownum from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where tt.id='"+id+"' ";
+            String numSql = " SELECT rownum from ( select (@i:=@i+1) rownum , s.* from "+tableSql+" s,(select @i:=0) t ) tt  where tt.id='"+id+"' ";
             Map map = systemService.findOneForJdbc(numSql);
             if(map!=null){
                 Object rownumObj = map.get("rownum");//获取该条数据在数据库中的位置
@@ -112,7 +120,7 @@ public class SelectedArticleRestController {
             }
         }
         //总条数
-        String countSql = "select count(0) from sht_article_news  where 1=1  ";
+        String countSql = "select count(0) from  "+tableSql+"  s where 1=1  ";
         long total  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数，只要能进这个方法说明至少有哦一条数据
         int totalNum = (int)total;
         int preNum=1;//前一条数据
@@ -134,16 +142,16 @@ public class SelectedArticleRestController {
         Map nextMap = null;//下一篇
         if(!first){//不是第一篇计算 上一篇
             //上一篇
-            String preSql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where rownum ="+ preNum;
+            String preSql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from  "+tableSql+" s,(select @i:=0) t ) tt  where rownum ="+ preNum;
             preMap = systemService.findOneForJdbc(preSql);
         }
         //本篇
-        String sql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where rownum ="+ num;
+        String sql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from  "+tableSql+" s,(select @i:=0) t ) tt  where rownum ="+ num;
         mapNow = systemService.findOneForJdbc(sql);
 
         if(!last){//不是最后一篇，计算下一篇
             //下一篇
-            String nextSql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where rownum ="+ nextNum;
+            String nextSql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from  "+tableSql+" s,(select @i:=0) t ) tt  where rownum ="+ nextNum;
             nextMap = systemService.findOneForJdbc(nextSql);
         }
 
