@@ -404,8 +404,15 @@ public class LoginController extends BaseController{
 				}
 				return null;
 			}
+			String devflag = user.getDevFlag();
+			if(devflag==null || "0".equals(devflag)){
+				request.getSession().invalidate();//销毁当前session。
+				return "main/forbidden";
+			}else{
+				return sysTheme.getIndexPath();
+			}
 
-			return sysTheme.getIndexPath();
+
 		} else {
 
 			//单点登录 - 返回链接

@@ -1,10 +1,12 @@
 package com.sht.restcontroller;
 
+import com.sht.restcontroller.tempentity.AjaxMsg;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.activation.DataHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -15,7 +17,7 @@ import java.util.Date;
  * 文件上传下载的 公用类
  */
 @RestController
-@RequestMapping("file")
+@RequestMapping("/file")
 public class FileRestController {
 
 
@@ -69,14 +71,15 @@ public class FileRestController {
 
     }
 
+
     /**
-     * 通知公告的信息 上传
+     *  上传
      */
-    @RequestMapping(value = "/save/notice", method = RequestMethod.POST)
-    public void saveNoticeFile(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public void uploadFile(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response){
         String resMsg = "";
         try {
-             String fileName = file.getOriginalFilename();
+            String fileName = file.getOriginalFilename();
             //String path="/Users/loukai/easylife/files/"+new Date().getTime()+file.getOriginalFilename();
             //服务器的真是路径，发布项目的 根路径 F：aa/bb
             String basePath = request.getSession().getServletContext().getRealPath("/");
@@ -86,21 +89,108 @@ public class FileRestController {
             SimpleDateFormat sd2 = new SimpleDateFormat("yyyyMMddHHmmss");//格式化 文件 名字的前缀
             //因为 Spring MVC 对静态 资源的控制原因，这里的file 上传到，"WEB-INF/skin/"下面
             String originname = file.getOriginalFilename();//文件的原名字
-            String addPath= "userfiles/rest/noticefile/userid/"+timestr+"/"+sd2.format(new Date())+originname;
+            String addPath= "WEB-INF/skin/" + "uploadfile/noticefile/"+timestr+"/"+sd2.format(new Date())+originname;
             String path = basePath + addPath;
             File newFile=new File(path);
             if(!newFile.exists()){
                 newFile.mkdirs();
             }
             file.transferTo(newFile);//通过CommonsMultipartFile的方法直接写文件
+            resMsg =  addPath.replace("WEB-INF/","");
             response.setCharacterEncoding("UTF8");
-            response.getWriter().write(addPath);
+            response.getWriter().write(resMsg);
         } catch (Exception e) {
             e.printStackTrace();
+            resMsg = "error";
         }
 
 
     }
+
+    /**
+     * 通知公告的信息 上传
+     */
+    @RequestMapping(value = "/upload2", method = RequestMethod.POST)
+    public AjaxMsg uploadFile2(HttpServletRequest request, HttpServletResponse response){
+        AjaxMsg ajaxMsg = new AjaxMsg();
+        String resMsg = "哈哈哈";
+        ajaxMsg.setMsg(resMsg);
+        //HttpContext.Current.Request.Files;
+        //CommonsMultipartFile file = null;
+        try {
+          /*  String fileName = file.getOriginalFilename();
+            //String path="/Users/loukai/easylife/files/"+new Date().getTime()+file.getOriginalFilename();
+            //服务器的真是路径，发布项目的 根路径 F：aa/bb
+            String basePath = request.getSession().getServletContext().getRealPath("/");
+            //按照时间 建立一个文件 每天一个文件夹
+            SimpleDateFormat sd = new SimpleDateFormat("yyyyMMdd");//格式化 文件夹 名字
+            String timestr =  sd.format(new Date());
+            SimpleDateFormat sd2 = new SimpleDateFormat("yyyyMMddHHmmss");//格式化 文件 名字的前缀
+            //因为 Spring MVC 对静态 资源的控制原因，这里的file 上传到，"WEB-INF/skin/"下面
+            String originname = file.getOriginalFilename();//文件的原名字
+            String addPath= "WEB-INF/skin/" + "uploadfile/noticefile/"+timestr+"/"+sd2.format(new Date())+originname;
+            String path = basePath + addPath;
+            File newFile=new File(path);
+            if(!newFile.exists()){
+                newFile.mkdirs();
+            }
+            file.transferTo(newFile);//通过CommonsMultipartFile的方法直接写文件
+            resMsg =  addPath.replace("WEB-INF/","");
+            response.setCharacterEncoding("UTF8");
+            response.getWriter().write(resMsg);*/
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return  ajaxMsg;
+    }
+
+
+    @RequestMapping(value = "/upload3", method = RequestMethod.POST)
+    public String upload(DataHandler handler, String fileName) {
+        if (fileName != null && !"".equals(fileName)) {
+            File file = new File(fileName);
+            if (handler != null) {
+                InputStream is = null;
+                FileOutputStream fos = null;
+                try {
+                    is = handler.getInputStream();
+                    fos = new FileOutputStream(file);
+                    byte[] buff = new byte[1024 * 8];
+                    int len = 0;
+                    while ((len = is.read(buff)) > 0) {
+                        fos.write(buff, 0, len);
+                    }
+                } catch (FileNotFoundException e) {
+                    return "fileNotFound";
+                } catch (Exception e) {
+                    return "upload File failure";
+                } finally {
+                    try {
+                        if (fos != null) {
+                            fos.flush();
+                            fos.close();
+                        }
+                        if (is != null) {
+                            is.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                return "file absolute path:" + file.getAbsolutePath();
+            } else {
+                return "handler is null";
+            }
+        } else {
+            return "fileName is null";
+        }
+    }
+
+
+
+
+
 
 
     /**

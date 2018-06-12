@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/selected/article")
+@RequestMapping("/article/selected")
 /**
  *  精选文章 外部接口
  */
@@ -82,6 +82,82 @@ public class SelectedArticleRestController {
         ajaxMsg.setModel(obj);
         return ajaxMsg;
     }
+
+
+    //计算上一篇下一篇
+    @RequestMapping(value = "/next",method = RequestMethod.GET)
+    @ResponseBody
+    public AjaxMsg pageNext( HttpServletResponse response, HttpServletRequest request){
+        AjaxMsg ajaxMsg = new AjaxMsg();
+        ajaxMsg.setMsg("success");
+        ajaxMsg.setResponsecode(HttpStatus.OK.value());
+        String id = request.getParameter("id");
+        if(StringUtil.isEmpty(id)){
+            ajaxMsg.setMsg("未获取到ID信息");
+            return ajaxMsg;
+        }
+        //计算本篇的位置
+        int num = 0;
+        if(StringUtil.isNotEmpty(id)){//点击详情的时候，需要计算 当前选中的文章新闻的序号。
+            //根据ID计算序号
+            String numSql = " SELECT rownum from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where tt.id='"+id+"' ";
+            Map map = systemService.findOneForJdbc(numSql);
+            if(map!=null){
+                Object rownumObj = map.get("rownum");//获取该条数据在数据库中的位置
+                if(rownumObj!=null){
+                    String rownum = rownumObj.toString();//此刻 获取的  是1.0  2.0 3.0 之类的浮点数
+                    rownum = rownum.substring(0,rownum.indexOf("."));//获取到位置
+                    num = Integer.valueOf(rownum);
+                }
+            }
+        }
+        //总条数
+        String countSql = "select count(0) from sht_article_news  where 1=1  ";
+        long total  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数，只要能进这个方法说明至少有哦一条数据
+        int totalNum = (int)total;
+        int preNum=1;//前一条数据
+        int nextNum=1;//后一条数据
+        boolean first = false;//是否是第一条，
+        boolean last = false;//是否是最后一条
+        if(num ==1 ){//第一条
+            first = true;
+        }
+        if(num>1 && num <totalNum ){//从第二条开始
+            preNum = num -1;
+            nextNum = num +1;
+        }
+        if(num == totalNum){//当前条是最后一条
+            last = true;
+        }
+        Map preMap = null;//上一篇
+        Map mapNow = null; //本篇
+        Map nextMap = null;//下一篇
+        if(!first){//不是第一篇计算 上一篇
+            //上一篇
+            String preSql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where rownum ="+ preNum;
+            preMap = systemService.findOneForJdbc(preSql);
+        }
+        //本篇
+        String sql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where rownum ="+ num;
+        mapNow = systemService.findOneForJdbc(sql);
+
+        if(!last){//不是最后一篇，计算下一篇
+            //下一篇
+            String nextSql = " SELECT * from ( select (@i:=@i+1) rownum , s.* from sht_article_news s,(select @i:=0) t ) tt  where rownum ="+ nextNum;
+            nextMap = systemService.findOneForJdbc(nextSql);
+        }
+
+        JSONObject obj = new JSONObject();
+        obj.put("preActicle", preMap);//上一篇
+        obj.put("nowActicle", mapNow);//本篇
+        obj.put("nextActicle", nextMap);//下一篇
+        obj.put("first",first);//是否是第一条
+        obj.put("last",last);//是否是最后一条
+        ajaxMsg.setModel(obj);
+        return ajaxMsg;
+    }
+
+
 
     @RequestMapping(value = "/info/{id}",method = RequestMethod.GET)
     @ResponseBody
