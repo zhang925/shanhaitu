@@ -70,6 +70,16 @@
 		      <input class="inputxt" id="status" name="status" ignore="ignore"   value="${investigateReportPage.status}" />
 		      <span class="Validform_checktip"></span>
 		    </div>
+
+			<div class="form">
+				<label class="Validform_label"> 目录图片的URL:</label>
+				<input class="inputxt" id="categoryImgUrl" name="categoryImgUrl" ignore="ignore"   value="${investigateReportPage.categoryImgUrl}" />
+				<span class="Validform_checktip"></span>
+			</div>
+
+
+
+
 			<div class="form">
 		      <label class="Validform_label">排序:</label>
 				<input class="inputxt" id="orders" name="orders" datatype="*"  <c:if test="${investigateReportPage.orders==null || investigateReportPage.orders=='' }"> value="0"</c:if>   value="${investigateReportPage.orders}" />

@@ -57,6 +57,9 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	private java.lang.String status;
 	/**排序*/
 	private double orders;
+
+	/**目录 图片的URL */
+	private String categoryImgUrl;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -285,5 +288,22 @@ public class InvestigateReportEntity implements java.io.Serializable {
 	 */
 	public void setOrders(double orders){
 		this.orders = orders;
+	}
+
+	/**
+	 *方法: 取得java.lang.String
+	 *@return: java.lang.String  目录图片url
+	 */
+	@Column(name ="CATEGORY_IMG_URL",nullable=true,length=11)
+	public String getCategoryImgUrl() {
+		return categoryImgUrl;
+	}
+
+	/**
+	 *方法: 设置 java.lang.String
+	 *@return: java.lang.String  目录图片url
+	 */
+	public void setCategoryImgUrl(String categoryImgUrl) {
+		this.categoryImgUrl = categoryImgUrl;
 	}
 }
