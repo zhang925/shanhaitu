@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.sht.entity.articlenews.ArticleNewsEntity;
 import com.sht.entity.investigatereport.InvestigateReportEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
+import com.sht.restcontroller.tempentity.AjaxMsgFactory;
 import com.sht.restcontroller.util.UtilSht;
 import com.sht.service.investigatereport.InvestigateReportServiceI;
 import org.apache.log4j.Logger;
@@ -100,30 +101,20 @@ public class InvestReportRestController {
 	@RequestMapping(value = "/info/{id}",method = RequestMethod.GET)
 	@ResponseBody
 	public AjaxMsg info(@PathVariable String id, HttpServletResponse response, HttpServletRequest request){
-		AjaxMsg ajaxMsg = new AjaxMsg();
-		InvestigateReportEntity investigateReportEntity = new InvestigateReportEntity();
+		InvestigateReportEntity investigateReportEntity;
 		if(StringUtil.isEmpty(id)){
-			ajaxMsg.setMsg("id不能为空");
-			ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
+			return AjaxMsgFactory.createErrorMsg(null, HttpStatus.NOT_FOUND, "id不能为空");
 		}
 		investigateReportEntity = systemService.getEntity(InvestigateReportEntity.class,id);
-		//
-		ajaxMsg.setMsg("success");
-		ajaxMsg.setResponsecode(HttpStatus.OK.value());
-		ajaxMsg.setModel(investigateReportEntity);
-		return ajaxMsg;
+
+		return AjaxMsgFactory.createSuccessMsg(investigateReportEntity);
 	}
 
 	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxMsg save(InvestigateReportEntity investigateReportEntity,HttpServletResponse response,HttpServletRequest request){
-		AjaxMsg ajaxMsg = new AjaxMsg();
 		systemService.save(investigateReportEntity);
-		//
-		ajaxMsg.setMsg("success");
-		ajaxMsg.setResponsecode(HttpStatus.OK.value());
-		ajaxMsg.setModel(investigateReportEntity);
-		return ajaxMsg;
+		return AjaxMsgFactory.createSuccessMsg(investigateReportEntity);
 	}
 
 	@RequestMapping(value = "/update",method = RequestMethod.POST)
