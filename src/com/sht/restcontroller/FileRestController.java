@@ -1,7 +1,9 @@
 package com.sht.restcontroller;
 
+import com.sht.entity.fileinfo.FileInfoEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
 import org.apache.commons.lang3.StringUtils;
+import org.jeecgframework.core.util.StringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -12,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 文件上传下载的 公用类
@@ -73,10 +77,71 @@ public class FileRestController {
 
 
     /**
+     * 从map中赋值 fileInfo
+     * @param map
+     * @return
+     */
+    public FileInfoEntity getFileInfoEntity(Map map){
+        FileInfoEntity fileInfoEntity = new FileInfoEntity();
+        if(map!=null){
+            Object modular = map.get("modular");
+            if(StringUtil.isNotEmpty(modular)){
+                fileInfoEntity.setModular(modular.toString());
+            }
+            Object className = map.get("className");
+            if(StringUtil.isNotEmpty(className)){
+                fileInfoEntity.setClassName(className.toString());
+            }
+            Object tableName = map.get("tableName");
+            if(StringUtil.isNotEmpty(tableName)){
+                fileInfoEntity.setTableName(tableName.toString());
+            }
+            Object columnid = map.get("columnid");
+            if(StringUtil.isNotEmpty(columnid)){
+                fileInfoEntity.setColumnid(columnid.toString());
+            }
+        }
+        return fileInfoEntity;
+    }
+
+    /**
+     *  上传 调研报告相关图集
+     */
+    @RequestMapping(value = "/upload/report/images", method = RequestMethod.POST)
+    public void uploadReportImages(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response){
+        Map map = new HashMap();
+        map.put("modular","report/images");
+        map.put("className","");
+        map.put("tableName","");
+        map.put("columnid","");
+        uploadFile( file,  map,  request,  response);
+    }
+
+    /**
+     *  上传 调研报告相关图集
+     */
+    @RequestMapping(value = "/upload/report/doc", method = RequestMethod.POST)
+    public void uploadReportDoc(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response){
+        Map map = new HashMap();
+        map.put("modular","report/doc");
+        map.put("className","");
+        map.put("tableName","");
+        map.put("columnid","");
+        uploadFile( file,  map,  request,  response);
+    }
+
+
+
+
+
+
+    /**
      *  上传
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public void uploadFile(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response){
+    public void uploadFile(@RequestParam("file") CommonsMultipartFile file, Map map, HttpServletRequest request, HttpServletResponse response){
+        //FileInfoEntity fileInfoEntity = getFileInfoEntity(map);//初始化 文件信息实体
+        Object addTempPath = map.get("modular").toString();
         String resMsg = "";
         try {
             String fileName = file.getOriginalFilename();
@@ -89,7 +154,7 @@ public class FileRestController {
             SimpleDateFormat sd2 = new SimpleDateFormat("yyyyMMddHHmmss");//格式化 文件 名字的前缀
             //因为 Spring MVC 对静态 资源的控制原因，这里的file 上传到，"WEB-INF/skin/"下面
             String originname = file.getOriginalFilename();//文件的原名字
-            String addPath= "WEB-INF/skin/" + "uploadfile/noticefile/"+timestr+"/"+sd2.format(new Date())+originname;
+            String addPath= "/uploadfile/"+addTempPath+"/"+timestr+"/"+sd2.format(new Date())+originname;
             String path = basePath + addPath;
             File newFile=new File(path);
             if(!newFile.exists()){
@@ -104,45 +169,6 @@ public class FileRestController {
             resMsg = "error";
         }
 
-
-    }
-
-    /**
-     * 通知公告的信息 上传
-     */
-    @RequestMapping(value = "/upload2", method = RequestMethod.POST)
-    public AjaxMsg uploadFile2(HttpServletRequest request, HttpServletResponse response){
-        AjaxMsg ajaxMsg = new AjaxMsg();
-        String resMsg = "哈哈哈";
-        ajaxMsg.setMsg(resMsg);
-        //HttpContext.Current.Request.Files;
-        //CommonsMultipartFile file = null;
-        try {
-          /*  String fileName = file.getOriginalFilename();
-            //String path="/Users/loukai/easylife/files/"+new Date().getTime()+file.getOriginalFilename();
-            //服务器的真是路径，发布项目的 根路径 F：aa/bb
-            String basePath = request.getSession().getServletContext().getRealPath("/");
-            //按照时间 建立一个文件 每天一个文件夹
-            SimpleDateFormat sd = new SimpleDateFormat("yyyyMMdd");//格式化 文件夹 名字
-            String timestr =  sd.format(new Date());
-            SimpleDateFormat sd2 = new SimpleDateFormat("yyyyMMddHHmmss");//格式化 文件 名字的前缀
-            //因为 Spring MVC 对静态 资源的控制原因，这里的file 上传到，"WEB-INF/skin/"下面
-            String originname = file.getOriginalFilename();//文件的原名字
-            String addPath= "WEB-INF/skin/" + "uploadfile/noticefile/"+timestr+"/"+sd2.format(new Date())+originname;
-            String path = basePath + addPath;
-            File newFile=new File(path);
-            if(!newFile.exists()){
-                newFile.mkdirs();
-            }
-            file.transferTo(newFile);//通过CommonsMultipartFile的方法直接写文件
-            resMsg =  addPath.replace("WEB-INF/","");
-            response.setCharacterEncoding("UTF8");
-            response.getWriter().write(resMsg);*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return  ajaxMsg;
     }
 
 
@@ -189,10 +215,6 @@ public class FileRestController {
 
 
 
-
-
-
-
     /**
      *  文件下载 根据文件地址 下载
      * @param request
@@ -203,9 +225,9 @@ public class FileRestController {
     @ResponseBody
     public void  downFileBySrc(HttpServletRequest request, HttpServletResponse response, String src){
         String downLoadPath = "";// 下载地址，是真实的 盘符 HttpServletResponse
-        // storeName 类似  skin/uploadfile/noticefile/20180604/20180604114710QQ截图.png
-        String basePath = request.getSession().getServletContext().getRealPath("/");// F:/platform/
-        downLoadPath =  basePath +"WEB-INF/" +src ;
+        // storeName 类似  uploadfile/noticefile/20180604/20180604114710QQ截图.png
+        String basePath = request.getSession().getServletContext().getRealPath("/");//
+        downLoadPath =  basePath +"/" +src ;
         String fileName = src.substring((src.lastIndexOf("/")+1),src.length());//获得 20180604114710QQ截图.png
         String storeName =  fileName.substring(14,fileName.length());//下载后要显示的文件名字 QQ截图.png
         try{
@@ -257,63 +279,7 @@ public class FileRestController {
     }
 
 
-    /**
-     *  文件下载，根据文件表的ID 关联下载 预留功能，暂时不做处理
-     * @param request
-     * @param response
-     * @param storeName
-     * @param contentType
-     */
-    @RequestMapping(value = "down/id")
-    public HttpServletResponse downFileById(HttpServletRequest request, HttpServletResponse response, String storeName, String contentType){
-        String downLoadPath = "F:/skin/uploadfile/noticefile/20180604/20180604114710QQ截图.png";//测试暂时定死
-        storeName = "下载后要保存的名字.png";
-        try{
-            request.setCharacterEncoding("UTF-8");
-            BufferedInputStream bis = null;
-            BufferedOutputStream bos = null;
 
-            //获取项目根目录
-            //String ctxPath = request.getSession().getServletContext().getRealPath("");
-            //获取下载文件
-            //String downLoadPath = ctxPath+"/uploadFile/"+ storeName;
-            //这里暂时认为文件已经确定
-            //获取文件的长度
-
-            File file = new File(downLoadPath);
-            if (!file.exists()) {//文件不存在
-                try {
-                    response.sendError(404, "服务器文件已经丢失，下载失败!");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return response;
-            }
-            long fileLength = file.length();
-            //设置文件输出类型
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-disposition", "attachment; filename="
-                    + new String(storeName.getBytes("utf-8"), "ISO8859-1"));
-            //设置输出长度
-            response.setHeader("Content-Length", String.valueOf(fileLength));
-            //获取输入流
-            bis = new BufferedInputStream(new FileInputStream(downLoadPath));
-            //输出流
-            bos = new BufferedOutputStream(response.getOutputStream());
-            byte[] buff = new byte[2048];
-            int bytesRead;
-            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-                bos.write(buff, 0, bytesRead);
-            }
-            //关闭流
-            bis.close();
-            bos.close();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return  response;
-    }
 
     /**
      *
@@ -331,7 +297,7 @@ public class FileRestController {
             return "src  necessary !";
         }
         //本项目中，文件放到 WEB-INF skin 下
-        String fileName = basePath + "WEB-INF/"+ src ;
+        String fileName = basePath + "/"+ src ;
         File file = new File(fileName);
         if(!file.exists()){//文件不存在
             return "file is not exists!";

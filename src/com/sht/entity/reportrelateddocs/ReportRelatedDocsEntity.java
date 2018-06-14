@@ -50,7 +50,8 @@ public class ReportRelatedDocsEntity implements java.io.Serializable {
 	@Id
 	@GeneratedValue(generator = "paymentableGenerator")
 	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
-	@Column(name ="ID",nullable=false,precision=10,scale=0)
+	@Column(name ="ID",nullable=false,length=32)
+
 	public java.lang.String getId(){
 		return this.id;
 	}
