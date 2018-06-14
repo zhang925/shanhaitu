@@ -91,7 +91,7 @@
              $.messager.alert("提示","请选择要上传的文件");
              return;
          }
-         var ajaxUrl = "${path}/api/file/upload/report/doc";
+         var ajaxUrl = "api/file/upload/report/doc";
          //alert(ajaxUrl);
          //$('#uploadPic').serialize() 无法序列化二进制文件，这里采用formData上传
          //需要浏览器支持：Chrome 7+、Firefox 4+、IE 10+、Opera 12+、Safari 5+。
@@ -143,7 +143,7 @@
      }
 
      function  doDelete(src) {
-         var ajaxUrl = "${path}/api/file/delete";
+         var ajaxUrl = "api/file/delete";
          $.ajax({
              type: "POST",
              url: ajaxUrl,
@@ -160,7 +160,7 @@
          });
      }
      function downfile(src){
-         location.href = "${path}/api/file/down/src?src="+src;
+         location.href = "api/file/down/src?src="+src;
      }
 
  </script>
