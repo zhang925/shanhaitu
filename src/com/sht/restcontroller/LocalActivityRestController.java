@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/localactivity")
 /**
  *  本地活动 外部接口
  */
