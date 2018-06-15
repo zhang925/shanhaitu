@@ -16,6 +16,12 @@
 		      <span class="Validform_checktip"></span>
 		    </div>
 			<div class="form">
+				<label class="Validform_label">关联用户ID:</label>
+				<input class="inputxt" id="userid" name="userid" ignore="ignore"   value="${servicePage.userid}" />
+				<span class="Validform_checktip"></span>
+			</div>
+
+			<div class="form">
 		      <label class="Validform_label">服务名字:</label>
 		      <input class="inputxt" id="servName" name="servName" ignore="ignore"   value="${servicePage.servName}" />
 		      <span class="Validform_checktip"></span>

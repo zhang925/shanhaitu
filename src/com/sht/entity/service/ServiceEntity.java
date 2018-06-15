@@ -31,6 +31,8 @@ import javax.persistence.SequenceGenerator;
 public class ServiceEntity implements java.io.Serializable {
 	/**id*/
 	private java.lang.String id;
+	/**用户id*/
+	private java.lang.String userid;
 	/**业务表ID*/
 	private java.lang.String busId;
 	/**服务名字*/
@@ -251,5 +253,13 @@ public class ServiceEntity implements java.io.Serializable {
 	 */
 	public void setCreatedTime(java.util.Date createdTime){
 		this.createdTime = createdTime;
+	}
+	@Column(name ="USERID",nullable=true,length=10)
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
 }
