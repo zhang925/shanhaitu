@@ -32,7 +32,7 @@ public class ReportRelatedDocsEntity implements java.io.Serializable {
 	/**id*/
 	private java.lang.String id;
 	/**调研报告ID*/
-	private java.lang.Integer investReportId;
+	private java.lang.String investReportId;
 	/**资料title*/
 	private java.lang.String title;
 	/**文件格式*/
@@ -68,7 +68,7 @@ public class ReportRelatedDocsEntity implements java.io.Serializable {
 	 *@return: java.lang.Integer  调研报告ID
 	 */
 	@Column(name ="INVEST_REPORT_ID",nullable=true,precision=10,scale=0)
-	public java.lang.Integer getInvestReportId(){
+	public java.lang.String getInvestReportId(){
 		return this.investReportId;
 	}
 
@@ -76,7 +76,7 @@ public class ReportRelatedDocsEntity implements java.io.Serializable {
 	 *方法: 设置java.lang.Integer
 	 *@param: java.lang.Integer  调研报告ID
 	 */
-	public void setInvestReportId(java.lang.Integer investReportId){
+	public void setInvestReportId(java.lang.String investReportId){
 		this.investReportId = investReportId;
 	}
 	/**
