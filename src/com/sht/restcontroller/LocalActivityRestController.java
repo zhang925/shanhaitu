@@ -42,7 +42,7 @@ public class LocalActivityRestController {
         }*/
 
         countSql = countSql + where;
-        where = where + " order by created_time DESC ";
+        //where = where + " order by created_time DESC ";
         sql = sql + where;
         long num  = systemService.getCountForJdbcParam(countSql,new Object[]{});//总条数
         Integer page = UtilSht.getPage(request);
