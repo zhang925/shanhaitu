@@ -104,6 +104,37 @@ public class FileRestController {
         return fileInfoEntity;
     }
 
+
+    /**
+     *  上传 活动资料
+     */
+    @RequestMapping(value = "/upload/activity/doc", method = RequestMethod.POST)
+    public void uploadActivityDoc(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response){
+        Map map = new HashMap();
+        map.put("modular","activity/doc");
+        map.put("className","");
+        map.put("tableName","");
+        map.put("columnid","");
+        uploadFile( file,  map,  request,  response);
+    }
+
+    /**
+     *  上传 调研报告相关图集
+     */
+    @RequestMapping(value = "/upload/activity/pictures", method = RequestMethod.POST)
+    public void uploadActivityPictures(@RequestParam("file") CommonsMultipartFile file, HttpServletRequest request, HttpServletResponse response){
+        Map map = new HashMap();
+        map.put("modular","activity/pictures");
+        map.put("className","");
+        map.put("tableName","");
+        map.put("columnid","");
+        uploadFile( file,  map,  request,  response);
+    }
+
+
+
+
+
     /**
      *  上传 调研报告相关图集
      */
