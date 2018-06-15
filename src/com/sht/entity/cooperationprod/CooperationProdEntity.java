@@ -48,7 +48,7 @@ public class CooperationProdEntity implements java.io.Serializable {
 	/**状态*/
 	private java.lang.Integer status;
 	/**排序*/
-	private java.lang.Double orders;
+	private double orders;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -203,7 +203,7 @@ public class CooperationProdEntity implements java.io.Serializable {
 	 *@return: java.lang.Double  排序
 	 */
 	@Column(name ="ORDERS",nullable=true,precision=11,scale=0)
-	public java.lang.Double getOrders(){
+	public double getOrders(){
 		return this.orders;
 	}
 
@@ -211,7 +211,7 @@ public class CooperationProdEntity implements java.io.Serializable {
 	 *方法: 设置java.lang.Double
 	 *@param: java.lang.Double  排序
 	 */
-	public void setOrders(java.lang.Double orders){
+	public void setOrders(double orders){
 		this.orders = orders;
 	}
 }

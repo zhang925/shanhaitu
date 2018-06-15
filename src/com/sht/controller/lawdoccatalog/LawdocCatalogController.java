@@ -1,4 +1,4 @@
-package com.sht.controller.cooperationprod;
+package com.sht.controller.lawdoccatalog;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +22,8 @@ import org.jeecgframework.web.system.pojo.base.TSDepart;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
-import com.sht.entity.cooperationprod.CooperationProdEntity;
-import com.sht.service.cooperationprod.CooperationProdServiceI;
+import com.sht.entity.lawdoccatalog.LawdocCatalogEntity;
+import com.sht.service.lawdoccatalog.LawdocCatalogServiceI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -45,22 +45,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**   
  * @Title: Controller
- * @Description: 合作对接
+ * @Description: 政策法规目录
  * @author zhangdaihao
- * @date 2018-06-15 11:00:53
+ * @date 2018-06-15 11:56:48
  * @version V1.0   
  *
  */
 @Controller
-@RequestMapping("/cooperationProdController")
-public class CooperationProdController extends BaseController {
+@RequestMapping("/lawdocCatalogController")
+public class LawdocCatalogController extends BaseController {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(CooperationProdController.class);
+	private static final Logger logger = Logger.getLogger(LawdocCatalogController.class);
 
 	@Autowired
-	private CooperationProdServiceI cooperationProdService;
+	private LawdocCatalogServiceI lawdocCatalogService;
 	@Autowired
 	private SystemService systemService;
 	@Autowired
@@ -69,13 +69,13 @@ public class CooperationProdController extends BaseController {
 
 
 	/**
-	 * 合作对接列表 页面跳转
+	 * 政策法规目录列表 页面跳转
 	 * 
 	 * @return
 	 */
 	@RequestMapping(params = "list")
 	public ModelAndView list(HttpServletRequest request) {
-		return new ModelAndView("sht/cooperationprod/cooperationProdList");
+		return new ModelAndView("sht/lawdoccatalog/lawdocCatalogList");
 	}
 
 	/**
@@ -88,31 +88,30 @@ public class CooperationProdController extends BaseController {
 	 */
 
 	@RequestMapping(params = "datagrid")
-	public void datagrid(CooperationProdEntity cooperationProd,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+	public void datagrid(LawdocCatalogEntity lawdocCatalog,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
 		//强制排序
 		dataGrid.setSort("orders");
 		dataGrid.setOrder("asc");
-
-		CriteriaQuery cq = new CriteriaQuery(CooperationProdEntity.class, dataGrid);
+		CriteriaQuery cq = new CriteriaQuery(LawdocCatalogEntity.class, dataGrid);
 		//查询条件组装器
-		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, cooperationProd, request.getParameterMap());
-		this.cooperationProdService.getDataGridReturn(cq, true);
+		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, lawdocCatalog, request.getParameterMap());
+		this.lawdocCatalogService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
 	}
 
 	/**
-	 * 删除合作对接
+	 * 删除政策法规目录
 	 * 
 	 * @return
 	 */
 	@RequestMapping(params = "del")
 	@ResponseBody
-	public AjaxJson del(CooperationProdEntity cooperationProd, HttpServletRequest request) {
+	public AjaxJson del(LawdocCatalogEntity lawdocCatalog, HttpServletRequest request) {
 		String message = null;
 		AjaxJson j = new AjaxJson();
-		cooperationProd = systemService.getEntity(CooperationProdEntity.class, cooperationProd.getId());
-		message = "合作对接删除成功";
-		cooperationProdService.delete(cooperationProd);
+		lawdocCatalog = systemService.getEntity(LawdocCatalogEntity.class, lawdocCatalog.getId());
+		message = "政策法规目录删除成功";
+		lawdocCatalogService.delete(lawdocCatalog);
 		systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 		
 		j.setMsg(message);
@@ -121,41 +120,36 @@ public class CooperationProdController extends BaseController {
 
 
 	/**
-	 * 添加合作对接
+	 * 添加政策法规目录
 	 * 
 	 * @param
 	 * @return
 	 */
 	@RequestMapping(params = "save")
 	@ResponseBody
-	public AjaxJson save(CooperationProdEntity cooperationProd, HttpServletRequest request) {
+	public AjaxJson save(LawdocCatalogEntity lawdocCatalog, HttpServletRequest request) {
 		String message = null;
 		AjaxJson j = new AjaxJson();
-		if (StringUtil.isNotEmpty(cooperationProd.getId())) {
-			message = "合作对接更新成功";
-			CooperationProdEntity t = cooperationProdService.get(CooperationProdEntity.class, cooperationProd.getId());
+		if (StringUtil.isNotEmpty(lawdocCatalog.getId())) {
+			message = "政策法规目录更新成功";
+			LawdocCatalogEntity t = lawdocCatalogService.get(LawdocCatalogEntity.class, lawdocCatalog.getId());
 			try {
-
 				double oldOrder = t.getOrders();//放到前面获取，不然后覆盖
-				double newOrder =  cooperationProd.getOrders();
-
-
-				MyBeanUtils.copyBeanNotNull2Bean(cooperationProd, t);
-				cooperationProdService.saveOrUpdate(t);
-
+				double newOrder =  lawdocCatalog.getOrders();
+				MyBeanUtils.copyBeanNotNull2Bean(lawdocCatalog, t);
+				lawdocCatalogService.saveOrUpdate(t);
 				//一定要保存后重新排序。
 				softOrder( oldOrder, newOrder);//重新排序
-
 				//systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			} catch (Exception e) {
 				e.printStackTrace();
-				message = "合作对接更新失败";
+				message = "政策法规目录更新失败";
 			}
 		} else {
-			message = "合作对接添加成功";
-			cooperationProdService.save(cooperationProd);
-			softOrder( -1, cooperationProd.getOrders());//重新排序
-
+			message = "政策法规目录添加成功";
+			lawdocCatalogService.save(lawdocCatalog);
+			//一定要保存后重新排序。
+			softOrder( -1,  lawdocCatalog.getOrders());//重新排序
 			//systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}
 		j.setMsg(message);
@@ -163,30 +157,30 @@ public class CooperationProdController extends BaseController {
 	}
 
 	/**
-	 * 合作对接列表页面跳转
+	 * 政策法规目录列表页面跳转
 	 * 
 	 * @return
 	 */
 	@RequestMapping(params = "addorupdate")
-	public ModelAndView addorupdate(CooperationProdEntity cooperationProd, HttpServletRequest req) {
-		if (StringUtil.isNotEmpty(cooperationProd.getId())) {
-			cooperationProd = cooperationProdService.getEntity(CooperationProdEntity.class, cooperationProd.getId());
-			req.setAttribute("cooperationProdPage", cooperationProd);
+	public ModelAndView addorupdate(LawdocCatalogEntity lawdocCatalog, HttpServletRequest req) {
+		if (StringUtil.isNotEmpty(lawdocCatalog.getId())) {
+			lawdocCatalog = lawdocCatalogService.getEntity(LawdocCatalogEntity.class, lawdocCatalog.getId());
+			req.setAttribute("lawdocCatalogPage", lawdocCatalog);
 		}
-		return new ModelAndView("sht/cooperationprod/cooperationProd");
+		return new ModelAndView("sht/lawdoccatalog/lawdocCatalog");
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public List<CooperationProdEntity> list() {
-		List<CooperationProdEntity> listCooperationProds=cooperationProdService.getList(CooperationProdEntity.class);
-		return listCooperationProds;
+	public List<LawdocCatalogEntity> list() {
+		List<LawdocCatalogEntity> listLawdocCatalogs=lawdocCatalogService.getList(LawdocCatalogEntity.class);
+		return listLawdocCatalogs;
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		CooperationProdEntity task = cooperationProdService.get(CooperationProdEntity.class, id);
+		LawdocCatalogEntity task = lawdocCatalogService.get(LawdocCatalogEntity.class, id);
 		if (task == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
@@ -195,19 +189,19 @@ public class CooperationProdController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<?> create(@RequestBody CooperationProdEntity cooperationProd, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> create(@RequestBody LawdocCatalogEntity lawdocCatalog, UriComponentsBuilder uriBuilder) {
 		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
-		Set<ConstraintViolation<CooperationProdEntity>> failures = validator.validate(cooperationProd);
+		Set<ConstraintViolation<LawdocCatalogEntity>> failures = validator.validate(lawdocCatalog);
 		if (!failures.isEmpty()) {
 			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
 		}
 
 		//保存
-		cooperationProdService.save(cooperationProd);
+		lawdocCatalogService.save(lawdocCatalog);
 
 		//按照Restful风格约定，创建指向新任务的url, 也可以直接返回id或对象.
-		String id = cooperationProd.getId();
-		URI uri = uriBuilder.path("/rest/cooperationProdController/" + id).build().toUri();
+		String id = lawdocCatalog.getId();
+		URI uri = uriBuilder.path("/rest/lawdocCatalogController/" + id).build().toUri();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uri);
 
@@ -215,15 +209,15 @@ public class CooperationProdController extends BaseController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> update(@RequestBody CooperationProdEntity cooperationProd) {
+	public ResponseEntity<?> update(@RequestBody LawdocCatalogEntity lawdocCatalog) {
 		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
-		Set<ConstraintViolation<CooperationProdEntity>> failures = validator.validate(cooperationProd);
+		Set<ConstraintViolation<LawdocCatalogEntity>> failures = validator.validate(lawdocCatalog);
 		if (!failures.isEmpty()) {
 			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
 		}
 
 		//保存
-		cooperationProdService.saveOrUpdate(cooperationProd);
+		lawdocCatalogService.saveOrUpdate(lawdocCatalog);
 
 		//按Restful约定，返回204状态码, 无内容. 也可以返回200状态码.
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -232,7 +226,7 @@ public class CooperationProdController extends BaseController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") String id) {
-		cooperationProdService.deleteEntityById(CooperationProdEntity.class, id);
+		lawdocCatalogService.deleteEntityById(LawdocCatalogEntity.class, id);
 	}
 
 
@@ -246,7 +240,7 @@ public class CooperationProdController extends BaseController {
 		if(oldOrder == newOrder){//没有改。
 			return;
 		}
-		List<CooperationProdEntity> list =  systemService.findHql(" from CooperationProdEntity as a ORDER BY a.orders ASC ",null);
+		List<LawdocCatalogEntity> list =  systemService.findHql(" from LawdocCatalogEntity as a ORDER BY a.orders ASC ",null);
 
 		if(list!=null && list.size()>0){//这种是全部排序最简单，后期数据量大的情况下，在优化。
 			//更新数据库
@@ -262,8 +256,8 @@ public class CooperationProdController extends BaseController {
 					}
 				}
 				for(double i=temp;i<list.size();i++){//比较消耗系统资源，但是没有办法
-					CooperationProdEntity model = list.get((int)i);
-					model.setOrders(((int)i+1));
+					LawdocCatalogEntity model = list.get((int)i);
+					model.setOrders((int)i+1);
 					systemService.updateEntitie(model);
 				}
 			}

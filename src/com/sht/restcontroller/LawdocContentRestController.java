@@ -1,6 +1,6 @@
 package com.sht.restcontroller;
 
-import com.sht.entity.comment.CommentEntity;
+import com.sht.entity.lawdoccontent.LawdocContentEntity;
 import com.sht.restcontroller.tempentity.AjaxMsg;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.web.system.service.SystemService;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/lawdoccontent")
 /**
- *  评论 外部接口
+ *  政策法规内容 外部接口
  */
-public class CommentRestController {
+public class LawdocContentRestController {
 
     @Autowired
     private SystemService systemService;
@@ -26,10 +26,10 @@ public class CommentRestController {
 
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @ResponseBody
-    public AjaxMsg list(CommentEntity commentEntity, HttpServletResponse response, HttpServletRequest request){
+    public AjaxMsg list(LawdocContentEntity lawdocContentEntity, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        List<CommentEntity> list = new ArrayList<CommentEntity>();
-        list = systemService.getList(CommentEntity.class);
+        List<LawdocContentEntity> list = new ArrayList<LawdocContentEntity>();
+        list = systemService.getList(LawdocContentEntity.class);
         //
 
         ajaxMsg.setMsg("success");
@@ -42,68 +42,68 @@ public class CommentRestController {
     @ResponseBody
     public AjaxMsg info(@PathVariable String id, HttpServletResponse response, HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        CommentEntity commentEntity = new CommentEntity();
+        LawdocContentEntity lawdocContentEntity = new LawdocContentEntity();
         if(StringUtil.isEmpty(id)){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.NOT_FOUND.value());
             return ajaxMsg;
         }
-        commentEntity = systemService.getEntity(CommentEntity.class,id);
+        lawdocContentEntity = systemService.getEntity(LawdocContentEntity.class,id);
         //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(commentEntity);
+        ajaxMsg.setModel(lawdocContentEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg save(CommentEntity commentEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg save(LawdocContentEntity lawdocContentEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
 
 
 
-        systemService.save(commentEntity);
+        systemService.save(lawdocContentEntity);
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(commentEntity);
+        ajaxMsg.setModel(lawdocContentEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg update(CommentEntity commentEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg update(LawdocContentEntity lawdocContentEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        if(commentEntity==null  || commentEntity.getId()==null){
+        if(lawdocContentEntity==null  || lawdocContentEntity.getId()==null){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
             return ajaxMsg;
         }
-        systemService.updateEntitie(commentEntity);
+        systemService.updateEntitie(lawdocContentEntity);
         //
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
-        ajaxMsg.setModel(commentEntity);
+        ajaxMsg.setModel(lawdocContentEntity);
         return ajaxMsg;
     }
 
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
-    public AjaxMsg delete(CommentEntity commentEntity,HttpServletResponse response,HttpServletRequest request){
+    public AjaxMsg delete(LawdocContentEntity lawdocContentEntity,HttpServletResponse response,HttpServletRequest request){
         AjaxMsg ajaxMsg = new AjaxMsg();
-        if(commentEntity==null  || commentEntity.getId()==null){
+        if(lawdocContentEntity==null  || lawdocContentEntity.getId()==null){
             ajaxMsg.setMsg("id不能为空");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
             return ajaxMsg;
         }
         //判断该实体是否存在
-        CommentEntity temp = systemService.getEntity(CommentEntity.class,commentEntity.getId());
+        LawdocContentEntity temp = systemService.getEntity(LawdocContentEntity.class,lawdocContentEntity.getId());
         if(temp==null || temp.getId()==null){
             ajaxMsg.setMsg("该实体不存在！");
             ajaxMsg.setResponsecode(HttpStatus.OK.value());
             return ajaxMsg;
         }
-        systemService.deleteEntityById(CommentEntity.class,commentEntity.getId());
+        systemService.deleteEntityById(LawdocContentEntity.class,lawdocContentEntity.getId());
 
         ajaxMsg.setMsg("success");
         ajaxMsg.setResponsecode(HttpStatus.OK.value());
